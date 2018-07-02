@@ -1,3 +1,10 @@
+This project was imported from https://archive.codeplex.com/?p=healthvaultjavalib
+
+It contains the latest 1.6.0 version from there plus the patches I have submitted
+to that project over the time it was maintained on that project.
+
+==================================================================================
+
 This project comprises an SDK to access HealthVault and some sample ui's
 allowing a user to view and add weight measurements.  
 
@@ -65,7 +72,7 @@ Private Key:
 
     keytool -export -alias java-wildcat -keystore keystore > my-pub.cer
 
-    Send the my-pub.cer file to the HealthVault team and we’ll take care of 
+    Send the my-pub.cer file to the HealthVault team and weï¿½ll take care of 
     the rest.
 
 Making SDK Requests:
@@ -76,7 +83,7 @@ Making SDK Requests:
 SSL:
     HealthVault requires requests be sent over SSL. Our site's certificates are
     signed with GTE CyberTrust Global Root as the trusted root certificate 
-    authority. This public key is shipped with Sun’s java runtime in a file 
+    authority. This public key is shipped with Sunï¿½s java runtime in a file 
     located at java.home/lib/security/cacerts. The alias for this key is 
     "gtecybertrustglobalca".  Depending on your JRE or environment, this
     public key may not be installed in your trusted store.  This is a known
@@ -86,5 +93,5 @@ SSL:
 
     keytool -keystore cacerts -exportcert -alias gtecybertrustglobalca > gte.crt
 
-    This public key should then be imported into WebSphere’s trusted store.
+    This public key should then be imported into WebSphereï¿½s trusted store.
 
