@@ -41,6 +41,7 @@ public class GetThingTypeTest {
     	requestInfo.getId().add("5C5F1223-F63C-4464-870C-3E36BA471DEF");
     	requestInfo.getSection().add(ThingTypeSectionSpec.XSD);
     	requestInfo.getSection().add(ThingTypeSectionSpec.VERSIONS);
+    	requestInfo.getSection().add(ThingTypeSectionSpec.TRANSFORMS);
     	
     	GetThingTypeResponse response = 
     		(GetThingTypeResponse)requestTemplate.makeRequest(requestInfo);

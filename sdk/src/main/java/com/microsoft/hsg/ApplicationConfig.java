@@ -16,6 +16,7 @@
 package com.microsoft.hsg;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Properties;
 
 /**
@@ -33,15 +34,30 @@ public class ApplicationConfig
 	static
 	{
 		loadProperties();
+		
+		try
+		{
+    		HV_SHELL_URI = new URI(getValue("shell.url"));
+    		HV_URI = new URI(getValue("healthvault.url"));
+		}
+		catch (Exception e)
+		{
+		    throw new HVException(e);
+		}
 	}
 	
 	/** The Constant APP_ID. */
 	public static final String APP_ID = 
 		getValue("app.id");
-	
+
+	/** Is this application aware of HV instances */
+	public static final boolean IS_MULTI_INSTANCE_AWARE =
+		getBooleanValue("app.isMultiInstanceAware", false);	
+			
 	/** The Constant HV_URL. */
-	public static final String HV_URL = 
-		getValue("healthvault.url");
+	public static final URI HV_URI;
+	
+	public static final URI HV_SHELL_URI;
 	
 	/** The Constant Transport_Timeout_Connection. */
 	public static final int Transport_Timeout_Connection = 
@@ -112,6 +128,19 @@ public class ApplicationConfig
 	public static String getValue(String name, String defaultValue)
 	{
 		return properties.getProperty(name, defaultValue);
+	}
+	
+	public static boolean getBooleanValue(
+			String name,
+			boolean defaultValue)
+	{
+		boolean returnValue = defaultValue;
+		String value = properties.getProperty(name);
+		if (value != null)
+		{
+			returnValue = Boolean.parseBoolean(value);
+		}
+		return returnValue;
 	}
 	
 	private static void loadProperties()

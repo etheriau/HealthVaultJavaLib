@@ -72,7 +72,11 @@ public class Controller extends HttpServlet {
 	{
 		try {
 			try {
-				RequestHandler handler = DefaultHandler;
+                HttpSession session = request.getSession();
+                PersonInfo personInfo = (PersonInfo)session.getAttribute(Constants.PERSON_INFO_KEY);
+                RequestCtx.setPersonInfo(personInfo);
+
+			    RequestHandler handler = DefaultHandler;
 				
 				Class clazz = (Class) pageMap.get(request.getPathInfo());
 				if (clazz != null) 
@@ -82,10 +86,7 @@ public class Controller extends HttpServlet {
 				
 				if (handler.isAuthenticationRequired())
 				{
-					HttpSession session = request.getSession();
-					PersonInfo personInfo = (PersonInfo)session.getAttribute(Constants.PERSON_INFO_KEY);
-					RequestCtx.setPersonInfo(personInfo);
-					if ( personInfo == null ) 
+				if ( personInfo == null ) 
 					{
 						ShellUtils.login(
 								request, 

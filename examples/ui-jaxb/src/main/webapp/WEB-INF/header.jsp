@@ -1,4 +1,5 @@
-<%@ page import="com.microsoft.hsg.applications.*" %> 
+<%@ page import="com.microsoft.hsg.applications.*" %>
+<%@ page import="com.microsoft.hsg.*" %>
 <table cellspacing="10">
    <tr>
       <td><a href="<%= request.getContextPath() %>/things/home">Home</a></td>
@@ -17,6 +18,7 @@ String personName = (personInfo == null ? "" : personInfo.getPersonName());
 String recordName = (personInfo == null ? "" : personInfo.getRecordName());
 String personId = (personInfo == null ? "" : personInfo.getPersonId());
 String recordId = (personInfo == null ? "" : personInfo.getRecordId());
+String instance = (personInfo == null ? "" : HVInstanceResolver.getInstanceResolver().getInstanceForId(personInfo.getInstanceId()).getName());
 
 %>
 
@@ -25,6 +27,7 @@ String recordId = (personInfo == null ? "" : personInfo.getRecordId());
    
       <td><%= "Person : " + personName %></td>
       <td><%= "Record : " + recordName %></td>
+      <td><%= "HV Instance : " + instance %></td>
    </tr>
    <tr>
    

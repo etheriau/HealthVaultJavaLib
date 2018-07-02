@@ -16,6 +16,7 @@
 package com.microsoft.hsg.applications;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
@@ -23,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.microsoft.hsg.ApplicationConfig;
+import com.microsoft.hsg.HVException;
+import com.microsoft.hsg.HVInstanceResolver;
+import com.microsoft.hsg.ShellUrlBuilder;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -126,8 +130,6 @@ public class ShellUtils {
 			throws ServletException, IOException {
 		sendShellTarget(request, response, "CREATERECORD", returnUrl);
 	}
-
-	
 	
 	/**
 	 * Send shell target.
@@ -144,34 +146,40 @@ public class ShellUtils {
 	public static void sendShellTarget(HttpServletRequest request,
 			HttpServletResponse response, String target, String returnUrl)
 			throws ServletException, IOException {
-				
-		StringBuffer targetqs = new StringBuffer();
-		targetqs.append("appid=");
-		targetqs.append(ApplicationConfig.APP_ID);
+		
+	    PersonInfo personInfo = RequestCtx.getPersonInfo();
+	    
+	    ShellUrlBuilder shellUrl = new ShellUrlBuilder();
+	    shellUrl.setAllowInstanceBounce(true);
+	    shellUrl.setAppId(ApplicationConfig.APP_ID);
+	    shellUrl.setTarget(target);
+	    if (personInfo != null) {
+	        shellUrl.setShellInstance(personInfo.getInstanceId());
+	    }
+	    
 		if (Config.RedirectUrl != null
 				&& Config.RedirectUrl.trim().length() != 0) {
-			targetqs.append("&redirect=");
-			targetqs.append(request.getScheme());
-			targetqs.append("://");
-			targetqs.append(request.getServerName());
-			targetqs.append(":");
-			targetqs.append(request.getServerPort());
-			targetqs.append(request.getContextPath());
-			targetqs.append(Config.RedirectUrl);
+		    StringBuilder returnUrlBuilder = new StringBuilder();
+			returnUrlBuilder.append(request.getScheme());
+			returnUrlBuilder.append("://");
+			returnUrlBuilder.append(request.getServerName());
+			returnUrlBuilder.append(":");
+			returnUrlBuilder.append(request.getServerPort());
+			returnUrlBuilder.append(request.getContextPath());
+			returnUrlBuilder.append(Config.RedirectUrl);
+			
+			try
+			{
+			    shellUrl.setReturnUrlOverride(new URI(returnUrlBuilder.toString()));
+			}
+			catch (Exception e)
+			{
+			    throw new HVException(e);
+			}
 		}
 		
-		if (returnUrl != null)
-		{
-			targetqs.append("&actionqs=");
-			targetqs.append(URLEncoder.encode(returnUrl));
-		}
-
-		StringBuffer url = new StringBuffer();
-		url.append(Config.ShellUrl);
-		url.append("/redirect.aspx?target=" + target + "&targetqs=?");
-		url.append(URLEncoder.encode(targetqs.toString()));
+		shellUrl.setActionqs(returnUrl);
 		
-		response.sendRedirect(url.toString());
+		response.sendRedirect(shellUrl.toString());
 	}
-
 }

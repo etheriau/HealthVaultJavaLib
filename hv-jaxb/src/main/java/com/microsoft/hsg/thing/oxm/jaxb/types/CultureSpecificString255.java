@@ -56,7 +56,7 @@ public class CultureSpecificString255 {
 
     @XmlValue
     protected String value;
-    @XmlAttribute(namespace = "http://www.w3.org/XML/1998/namespace")
+    @XmlAttribute(name = "lang", namespace = "http://www.w3.org/XML/1998/namespace")
     protected String lang;
     
     /**

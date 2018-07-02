@@ -15,6 +15,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import com.microsoft.hsg.methods.jaxb.JaxbRequest;
 import com.microsoft.hsg.thing.oxm.jaxb.thing.Thing2;
 
 
@@ -55,6 +57,10 @@ import com.microsoft.hsg.thing.oxm.jaxb.thing.Thing2;
  * 
  * 
  */
+@JaxbRequest(
+		methodName = "PutThings",
+		methodVersion = "2",
+		responseNS = "urn:com.microsoft.wc.methods.response.PutThings")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
     "thing"

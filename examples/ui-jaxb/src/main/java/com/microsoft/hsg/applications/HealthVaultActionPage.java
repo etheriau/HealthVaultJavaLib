@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
+import com.microsoft.hsg.ApplicationConfig;
 import com.microsoft.hsg.ConnectionFactory;
 import com.microsoft.hsg.HVAccessor;
 import com.microsoft.hsg.HVException;
@@ -64,7 +65,6 @@ public class HealthVaultActionPage extends HttpServlet {
 			actionqs = "/";
 		}
 		
-
 		if ("APPAUTHINVALIDRECORD".equalsIgnoreCase(target)) {
 			OnActionAppAuthInvalidRecord(request, response, actionqs);
 		} else if ("APPAUTHREJECT".equalsIgnoreCase(target)) {
@@ -224,9 +224,10 @@ public class HealthVaultActionPage extends HttpServlet {
 	private PersonInfo loginSuccess(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String authToken = (String) request.getParameter(Constants.TOKEN_NAME);
+		String instanceId = (String) request.getParameter(Constants.INSTANCE_ID);
 		if (authToken != null) {
 			PersonInfo personInfo = HealthVaultActionPage
-					.getSelectedRecordAndPerson(authToken);
+					.getSelectedRecordAndPerson(authToken, instanceId);
 
 			HttpSession session = request.getSession();
 			session.setAttribute(Constants.PERSON_INFO_KEY, personInfo);
@@ -235,7 +236,9 @@ public class HealthVaultActionPage extends HttpServlet {
 		return null;
 	}
 
-	public static PersonInfo getSelectedRecordAndPerson(String userAuthToken)
+	public static PersonInfo getSelectedRecordAndPerson(
+	        String userAuthToken,
+	        String instanceId)
 			throws HVException {
 		try {
 			Request request = new Request();
@@ -243,7 +246,11 @@ public class HealthVaultActionPage extends HttpServlet {
 			request.setMethodName("GetPersonInfo");
 			request.setUserAuthToken(userAuthToken);
 			HVAccessor accessor = new HVAccessor();
-			accessor.send(request, ConnectionFactory.getConnection());
+			accessor.send(
+			        request, 
+			        ConnectionFactory.getConnectionForInstance(
+			                ApplicationConfig.APP_ID,
+			                instanceId));
 			InputStream is = accessor.getResponse().getInputStream();
 
 			XPath xpath = XPathFactory.newInstance().newXPath();
@@ -255,7 +262,10 @@ public class HealthVaultActionPage extends HttpServlet {
 			person.setPersonName(xpath.evaluate("name", personInfo));
 			person.setRecordId(xpath.evaluate("record/@id", personInfo));
 			person.setRecordName(xpath.evaluate("record", personInfo));
-
+			person.setInstanceId(instanceId);
+			
+			is.close();
+			
 			return person;
 		} catch (HVException he) {
 			throw he;

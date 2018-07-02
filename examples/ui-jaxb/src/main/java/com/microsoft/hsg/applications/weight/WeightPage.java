@@ -110,7 +110,7 @@ public class WeightPage implements RequestHandler {
 		    	PutThingsRequest ptRequest = new PutThingsRequest();
 		    	ptRequest.getThing().add(thing);
 		    	
-		    	OnlineRequestTemplate requestTemplate = new OnlineRequestTemplate(ConnectionFactory.getConnection());
+		    	OnlineRequestTemplate requestTemplate = new OnlineRequestTemplate();
 		    	Object obj = requestTemplate.makeRequest(ptRequest);
 			}
 		}
@@ -129,7 +129,7 @@ public class WeightPage implements RequestHandler {
 			HttpServletResponse response)
 	throws Exception
 	{
-		OnlineRequestTemplate requestTemplate = new OnlineRequestTemplate(ConnectionFactory.getConnection());
+		OnlineRequestTemplate requestTemplate = new OnlineRequestTemplate();
 		ThingRequestGroup group = new ThingRequestGroup();
     	
     	ThingFilterSpec filter = new ThingFilterSpec();

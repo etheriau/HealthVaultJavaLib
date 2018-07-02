@@ -17,6 +17,7 @@ package com.microsoft.hsg.applications;
 
 import java.io.InputStream;
 
+import com.microsoft.hsg.ApplicationConfig;
 import com.microsoft.hsg.Connection;
 import com.microsoft.hsg.ConnectionFactory;
 import com.microsoft.hsg.HVAccessor;
@@ -41,9 +42,11 @@ public class OnlineRequestTemplate extends SimpleRequestTemplate
 	 * 
 	 * @param connection the connection
 	 */
-	public OnlineRequestTemplate(Connection connection)
+	public OnlineRequestTemplate()
 	{
-		super(connection);
+		super(ConnectionFactory.getConnectionForInstance(
+		        ApplicationConfig.APP_ID, 
+		        RequestCtx.getPersonInfo().getInstanceId()));
 	}
 	
 	/**

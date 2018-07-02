@@ -15,6 +15,7 @@
  */
 package com.microsoft.hsg;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 
@@ -67,14 +68,9 @@ public class ConnectionFactory
 	{
 		try
 		{
-	        Connection connection = new Connection();
-	        connection.setTransport(getTransport());
-	        connection.setAuthenticator(getAuthenticator(appId));
-	        connection.authenticate();
-	        
-	        return connection;    
-		} 
-		catch (Exception e)
+			return getConnection(appId, ApplicationConfig.HV_URI);
+		}
+		catch(Exception e)
 		{
 			throw new HVException(e);
 		}
@@ -88,15 +84,51 @@ public class ConnectionFactory
 	public static Connection getConnection()
 	{
 		return getConnection(appId);	}
+
+	/**
+	 * Gets a connection using the specified url for 
+	 * HealthVault platform's endpoint.  
+	 * 
+	 * @param platform uri
+	 * @return the connection
+	 */
+    public static Connection getConnection(
+    		String appId, 
+    		URI platform)
+    {
+    	try
+		{
+	        Connection connection = new Connection();
+	        connection.setTransport(getTransport(platform));
+	        connection.setAuthenticator(getAuthenticator(appId));
+	        connection.authenticate();
+	        
+	        return connection;    
+		} 
+		catch (Exception e)
+		{
+			throw new HVException(e);
+		}
+    }
+    
+    public static Connection getConnectionForInstance(
+            String appId,
+            String instanceId ) 
+    {
+        URI platformURI = HVInstanceResolver
+                .getInstanceResolver()
+                .getInstanceForId(instanceId)
+                .getPlatformUri();
+        return getConnection(appId, platformURI);
+    }
 	
-	private static Transport getTransport()
+	private static Transport getTransport(URI platform)
 	throws Exception
 	{
 		int connectTimeout = ApplicationConfig.Transport_Timeout_Connection;
 		int readTimeout = ApplicationConfig.Transport_Timeout_Read;
-		String urlString = 	ApplicationConfig.HV_URL;
 		
-		URL url = new URL(urlString);
+		URL url = platform.toURL();
 			
 		URLConnectionTransport transport = new URLConnectionTransport();
 		transport.setConnectionTimeout(connectTimeout);
@@ -105,7 +137,4 @@ public class ConnectionFactory
 		
 		return transport;
 	}
-		
-	
-
 }

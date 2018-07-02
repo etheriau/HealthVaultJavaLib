@@ -36,6 +36,9 @@ public class PersonInfo implements Serializable
 	/** The record id. */
 	private String recordName;
 
+	/** An idenfier of which instance contains the persons Health Record. */
+	private String instanceId;
+	
 	public String getPersonId() {
 		return personId;
 	}
@@ -102,4 +105,14 @@ public class PersonInfo implements Serializable
 	{
 		this.userAuthToken = userAuthToken;
 	}
+
+    public String getInstanceId() 
+    {
+        return instanceId;
+    }
+
+    public void setInstanceId(String instanceId) 
+    {
+        this.instanceId = instanceId;
+    }
 }

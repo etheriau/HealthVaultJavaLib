@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 
 import com.microsoft.hsg.ConnectionFactory;
 import com.microsoft.hsg.methods.jaxb.SimpleRequestTemplate;
-import com.microsoft.hsg.methods.jaxb.getservicedefinition.request.GetServiceDefinitionRequest;
-import com.microsoft.hsg.methods.jaxb.getservicedefinition.response.GetServiceDefinitionResponse;
+import com.microsoft.hsg.methods.jaxb.getservicedefinition2.request.GetServiceDefinition2Request;
+import com.microsoft.hsg.methods.jaxb.getservicedefinition2.response.GetServiceDefinition2Response;
 
 @RunWith(JMock.class)
 public class GetServiceDefinitionTest {
@@ -36,9 +36,9 @@ public class GetServiceDefinitionTest {
     	SimpleRequestTemplate requestTemplate = new SimpleRequestTemplate(
     			ConnectionFactory.getConnection());
     	
-    	GetServiceDefinitionResponse response = 
-    		(GetServiceDefinitionResponse)requestTemplate.makeRequest(
-    			new GetServiceDefinitionRequest());
+    	GetServiceDefinition2Response response = 
+    		(GetServiceDefinition2Response)requestTemplate.makeRequest(
+    			new GetServiceDefinition2Request());
     	
     	Assert.assertNotNull(response);
     }
