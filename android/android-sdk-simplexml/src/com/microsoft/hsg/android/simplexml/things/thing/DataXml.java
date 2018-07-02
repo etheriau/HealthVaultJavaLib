@@ -8,8 +8,11 @@ import org.simpleframework.xml.Order;
 import com.microsoft.hsg.android.simplexml.things.types.allergy.Allergy;
 import com.microsoft.hsg.android.simplexml.things.types.appointment.Appointment;
 import com.microsoft.hsg.android.simplexml.things.types.base.Person;
+import com.microsoft.hsg.android.simplexml.things.types.cholesterol.Cholesterol;
 import com.microsoft.hsg.android.simplexml.things.types.condition.Condition;
+import com.microsoft.hsg.android.simplexml.things.types.file.File;
 import com.microsoft.hsg.android.simplexml.things.types.height.Height;
+import com.microsoft.hsg.android.simplexml.things.types.immunization.Immunization;
 import com.microsoft.hsg.android.simplexml.things.types.medication.Medication;
 import com.microsoft.hsg.android.simplexml.things.types.personal.PersonalDemographics;
 import com.microsoft.hsg.android.simplexml.things.types.personalimage.PersonalImage;
@@ -47,9 +50,6 @@ import com.microsoft.hsg.android.simplexml.things.types.weight.Weight;
  * 
  * 
  */
-@Order(elements = {
-    "common"
-})
 public class DataXml {
 
 	@ElementUnion({
@@ -62,9 +62,12 @@ public class DataXml {
 		@Element(name="weight", type=Weight.class),
 		@Element(name="height", type=Height.class),		
 		@Element(name="appointment", type=Appointment.class),
-		@Element(name="procedure", type=Procedure.class)
+		@Element(name="procedure", type=Procedure.class),
+		@Element(name="immunization", type=Immunization.class),
+		@Element(name="cholesterol-profile", type=Cholesterol.class),
+		@Element(name="file", type=File.class)
 	})
-    protected Object any;
+    protected AbstractThing any;
     
     @Element(required=false)
     protected Common common;
@@ -80,7 +83,7 @@ public class DataXml {
      *     {@link Element }
      *     
      */
-    public Object getAny() {
+    public AbstractThing getAny() {
         return any;
     }
 
@@ -92,7 +95,7 @@ public class DataXml {
      *     {@link Element }
      *     
      */
-    public void setAny(Object value) {
+    public void setAny(AbstractThing value) {
         this.any = value;
     }
 

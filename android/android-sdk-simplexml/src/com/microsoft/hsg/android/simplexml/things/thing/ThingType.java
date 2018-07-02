@@ -31,6 +31,13 @@ import org.simpleframework.xml.Text;
  * 
  */
 public class ThingType {
+	
+	public ThingType() {
+	}
+	
+	public ThingType(String value) {
+		this.value = value;
+	}
 
     @Text
     protected String value;

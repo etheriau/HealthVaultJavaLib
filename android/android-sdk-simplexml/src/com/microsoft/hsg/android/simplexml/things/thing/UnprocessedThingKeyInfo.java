@@ -46,7 +46,7 @@ import org.simpleframework.xml.Order;
 @Order(elements = {
     "thing-id",
     "type-id",
-    "effate"
+    "eff-date"
 })
 public class UnprocessedThingKeyInfo {
 

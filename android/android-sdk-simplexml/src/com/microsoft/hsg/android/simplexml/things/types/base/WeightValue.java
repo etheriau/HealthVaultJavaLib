@@ -54,17 +54,24 @@ import org.simpleframework.xml.Order;
 public class WeightValue {
 
 	@Element(required=true)
-    protected double kg;
+    protected PositiveDouble kg;
 	
 	@Element(required=false)
     protected DisplayValue display;
+	
+	public WeightValue() {
+	}
+	
+	public WeightValue(double kg) {
+		this.kg =new PositiveDouble(kg);
+	}
 
     /**
      * Gets the value of the kg property.
      * 
      */
-    public double getKg() {
-        return kg;
+    public Double getKg() {
+        return kg == null ? null : kg.getValue();
     }
 
     /**
@@ -72,7 +79,7 @@ public class WeightValue {
      * 
      */
     public void setKg(double value) {
-        this.kg = value;
+        this.kg = new PositiveDouble(value);
     }
 
     /**

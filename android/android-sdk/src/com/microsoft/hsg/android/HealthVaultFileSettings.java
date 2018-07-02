@@ -169,6 +169,14 @@ public class HealthVaultFileSettings implements HealthVaultSettings {
         }
     }
     
+    public boolean getIsMRA() {
+		return Boolean.valueOf(properties.getProperty("isMRA"));
+	}
+	
+	public void setIsMRA(boolean isMRA) {
+		properties.setProperty("isMRA", String.valueOf(isMRA));
+	}
+    
     /* (non-Javadoc)
      * @see com.microsoft.hsg.android.HealthVaultSettings#clear()
      */

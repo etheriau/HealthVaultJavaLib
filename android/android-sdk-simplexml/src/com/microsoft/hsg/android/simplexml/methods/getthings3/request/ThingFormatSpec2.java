@@ -64,7 +64,7 @@ public class ThingFormatSpec2 {
     @Element(required=false, name="blob-payload-request")
     protected BlobPayloadRequest blobPayloadRequest;
 
-    /**
+	/**
      * Gets the value of the section property.
      * 
      * <p>
@@ -174,5 +174,10 @@ public class ThingFormatSpec2 {
     public void setBlobPayloadRequest(BlobPayloadRequest value) {
         this.blobPayloadRequest = value;
     }
-
+    
+    public ThingFormatSpec2 setSection(ThingSectionSpec2 sectionSpec) {
+    	getSection().add(sectionSpec);
+    	
+    	return this;
+    }
 }

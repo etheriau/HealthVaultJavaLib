@@ -41,19 +41,17 @@ import org.w3c.dom.Element;
  * 
  * 
  */
-@Order(elements = {
-    "any"
-})
 public class Extension {
 
     protected List<String> any;
+
     @Attribute(required = true)
     protected String source;
-    @Attribute
+    @Attribute(required = false)
     protected String ver;
-    @Attribute
+    @Attribute(required = false)
     protected String logo;
-    @Attribute
+    @Attribute(required = false)
     protected String xsl;
 
     /**

@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
+import com.microsoft.hsg.android.simplexml.things.thing.AbstractThing;
 import com.microsoft.hsg.android.simplexml.things.types.base.CodableValue;
 import com.microsoft.hsg.android.simplexml.things.types.base.Name;
 import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
@@ -79,7 +80,9 @@ import com.microsoft.hsg.android.simplexml.things.types.dates.DateTime;
     "organ-donor"
 })
 @Root(name = "personal")
-public class PersonalDemographics {
+public class PersonalDemographics extends AbstractThing {
+
+	public static final String ThingType = "92ba621e-66b3-4a01-bd73-74844aed4f5b";
 
     @Element(required = false)
     protected Name name;
@@ -460,8 +463,7 @@ public class PersonalDemographics {
         this.organDonor = value;
     }
 
-	public static String getThingType() {
-		return "92ba621e-66b3-4a01-bd73-74844aed4f5b";
+	public String getThingType() {
+		return ThingType; 
 	}
-
 }

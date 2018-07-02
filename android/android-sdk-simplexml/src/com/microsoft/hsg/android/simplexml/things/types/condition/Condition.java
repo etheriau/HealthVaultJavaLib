@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
+import com.microsoft.hsg.android.simplexml.things.thing.AbstractThing;
 import com.microsoft.hsg.android.simplexml.things.types.base.CodableValue;
 import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
 
@@ -53,7 +54,9 @@ import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
     "stop-reason"
 })
 @Root(name = "condition")
-public class Condition {
+public class Condition extends AbstractThing {
+	
+	public static final String ThingType = "7ea7a1f9-880b-4bd4-b593-f5660f20eda8";
 
     @Element(required = true)
     protected CodableValue name;
@@ -190,8 +193,8 @@ public class Condition {
         this.stopReason = value;
     }
     
-	public static String getThingType() {
-		return "7ea7a1f9-880b-4bd4-b593-f5660f20eda8";
+	public String getThingType() {
+		return ThingType; 
 	}
 
 }

@@ -6,8 +6,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="17" />
+        android:minSdkVersion="10" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.microsoft.hsg.android.ShellActivity" >
+        <activity android:name="com.microsoft.hsg.android.simplexml.ShellActivity" >
         </activity>
         
         <activity android:name=".WeightActivity"

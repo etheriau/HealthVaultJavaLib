@@ -4,6 +4,18 @@ import java.util.Date;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.core.Commit;
+
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.BlobFormatSpec;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.BlobPayloadRequest;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.ThingFilterSpec;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.ThingFormatSpec2;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.ThingRequestGroup2;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.ThingSectionSpec2;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.BlobPayloadRequest.BlobFormat;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.response.ThingResponseGroup2;
+import com.microsoft.hsg.android.simplexml.things.types.types.Record;
 
 /**
  * 
@@ -45,6 +57,7 @@ import org.simpleframework.xml.Order;
  * 
  * 
  */
+@Root(name="thing")
 @Order(elements = {
     "thing-id",
     "type-id",
@@ -347,15 +360,63 @@ public class Thing2 {
         this.tags = value;
     }
     
-    public Object getData() {
+    public AbstractThing getData() {
     	return dataXml.getAny();
     }
     
-    public void setData(Object obj) {
+    public void setData(AbstractThing obj) {
     	if (dataXml == null) {
     		dataXml = new DataXml();
     	}
     	
     	dataXml.setAny(obj);
+    	typeId = new ThingType(obj.getThingType());
     }
+    
+    @Commit
+    private void fixUpInternalThingReference() {
+    	dataXml.getAny().setThing(this);
+    }
+    
+    public Boolean hasBlobData() {
+    	return blobPayload != null;
+    }
+
+	public void addOrUpdateBlob(BlobPayloadItem blob) {
+		if(blobPayload == null || !blobPayload.hasBlobs()) {
+			blobPayload = new BlobPayload();
+		}
+		
+		blobPayload.addOrUpdateBlob(blob);
+	}
+	
+	public void refreshBlobData(Record record) {
+		refreshBlobData(record, null);
+	}
+	
+	public void refreshBlobData(Record record, BlobFormatSpec blobSpec) {
+		BlobFormatSpec blobFormatSpec = blobSpec == null ? BlobFormatSpec.streamed : BlobFormatSpec.inline;
+		
+		BlobFormat blobFormat = new BlobFormat();
+		blobFormat.setBlobFormatSpec(blobFormatSpec);
+		
+		BlobPayloadRequest blobPayloadRequest = new BlobPayloadRequest();
+		blobPayloadRequest.setBlobFormat(blobFormat);
+		
+		ThingFormatSpec2 formatSpec = new ThingFormatSpec2();
+		formatSpec.getSection().add(ThingSectionSpec2.blobpayload);
+		formatSpec.getXml().add("");
+		formatSpec.setBlobPayloadRequest(blobPayloadRequest);
+		
+		ThingRequestGroup2 requestGroup = ThingRequestGroup2.keyQuery(thingId);
+		requestGroup.setFormat(formatSpec);
+		
+		ThingResponseGroup2 response = record.getThings(requestGroup);
+		
+		Thing2 thing = response.getThing().get(0);
+		
+		if(thing.hasBlobData()) {
+			this.blobPayload = thing.getBlobPayload();
+		}
+	}
 }

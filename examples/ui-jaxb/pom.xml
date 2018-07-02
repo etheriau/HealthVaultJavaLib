@@ -4,13 +4,13 @@
   <groupId>hv</groupId>
   <artifactId>weight-jaxb-ui</artifactId>
   <packaging>war</packaging>
-  <version>1.5</version>
+  <version>1.6</version>
   <name>ui-jaxb</name>
   <url>http://maven.apache.org</url>
   <parent>
     <groupId>com.microsoft.hsg</groupId>
     <artifactId>hv-examples</artifactId>
-    <version>1.5</version>
+    <version>1.6</version>
   </parent>
   <dependencies>
         <dependency>
@@ -62,12 +62,12 @@
 		<dependency>
 			<groupId>com.microsoft.hsg</groupId>
 			<artifactId>hv-sdk</artifactId>
-			<version>1.5</version>
+			<version>1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.hsg</groupId>
 			<artifactId>hv-jaxb</artifactId>
-			<version>1.5</version>
+			<version>1.6</version>
 		</dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>

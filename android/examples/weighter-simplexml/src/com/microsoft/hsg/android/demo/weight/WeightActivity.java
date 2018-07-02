@@ -15,43 +15,103 @@
  */
 package com.microsoft.hsg.android.demo.weight;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
+import java.util.concurrent.Callable;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
-import com.microsoft.hsg.Request;
-import com.microsoft.hsg.android.HealthVaultService;
-import com.microsoft.hsg.android.PersonInfo;
-import com.microsoft.hsg.android.Record;
-import com.microsoft.hsg.android.ShellActivity;
-import com.microsoft.hsg.android.XmlUtils;
-import com.microsoft.hsg.android.simplexml.things.store.impl.ThingStoreProvider;
+import com.microsoft.hsg.HVException;
+import com.microsoft.hsg.android.simplexml.HealthVaultApp;
+import com.microsoft.hsg.android.simplexml.ShellActivity;
+import com.microsoft.hsg.android.simplexml.client.HealthVaultClient;
+import com.microsoft.hsg.android.simplexml.client.RequestCallback;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.ThingRequestGroup2;
+import com.microsoft.hsg.android.simplexml.methods.getthings3.response.ThingResponseGroup2;
 import com.microsoft.hsg.android.simplexml.things.thing.Thing2;
-import com.microsoft.hsg.request.RequestMarshaller;
-import com.microsoft.hsg.request.SimpleRequestTemplate;
+import com.microsoft.hsg.android.simplexml.things.types.types.PersonInfo;
+import com.microsoft.hsg.android.simplexml.things.types.types.Record;
+import com.microsoft.hsg.android.simplexml.things.types.weight.Weight;
 
 public class WeightActivity extends Activity {
-    private HealthVaultService service;
+
+	private HealthVaultApp service;
+    private HealthVaultClient hvClient;
     private Record selectedRecord;
     
+    public class WeightCallback<Object> implements RequestCallback {
+    	public final static int UpdateWeights = 0;
+    	public final static int PutWeights = 1;
+    	public final static int UpdateRecords = 2;
+    
+    	private int event;
+    	
+    	public WeightCallback(int event) {
+            WeightActivity.this.setProgressBarIndeterminateVisibility(true);
+    		this.event = event;
+    	}
+
+        @Override
+        public void onError(HVException exception) {
+            WeightActivity.this.setProgressBarIndeterminateVisibility(false);
+            Toast.makeText(
+                WeightActivity.this, 
+                "An error occurred.  " + exception.getMessage(), 
+                Toast.LENGTH_LONG).show();
+        }
+
+		@Override
+		public void onSuccess(java.lang.Object obj) {
+            WeightActivity.this.setProgressBarIndeterminateVisibility(false);
+            switch(event) {
+            case PutWeights:
+            	getWeights();
+            	break;
+            case UpdateWeights:
+                updateWeights(((ThingResponseGroup2)obj).getThing());
+                break;
+            case UpdateRecords:
+                updateRecords((List<Record>)obj);
+                break;
+            }
+        }
+    }
+    
+    private void updateWeights(List<Thing2> things) {
+    	List<String> weights = new ArrayList<String>();
+        for(Thing2 thing : things) {
+        	Weight w = (Weight)thing.getData();
+        	weights.add(String.valueOf(w.getValue().getKg()));	
+        }
+        ListView lv = (ListView)findViewById(R.id.weightList);
+        lv.setAdapter(new ArrayAdapter<String>(
+            WeightActivity.this,
+            android.R.layout.simple_list_item_1,
+            weights));    
+    }
+   
+    private void updateRecords(List<Record> records) {
+        Spinner s = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(
+            WeightActivity.this, 
+            android.R.layout.simple_spinner_item,
+            records);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s.setAdapter(adapter);
+    }
+
     /**
      * Called when the activity is first created.
      * 
@@ -60,13 +120,14 @@ public class WeightActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.weight);
-        service = HealthVaultService.getInstance();
+        service = HealthVaultApp.getInstance();
+        hvClient = new HealthVaultClient();
 
         Button startAuth = (Button) findViewById(R.id.auth);
         startAuth.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                HealthVaultService service = HealthVaultService.getInstance();
                 startActivity(ShellActivity.createAppAuthIntent(
                     WeightActivity.this, service.getAppId()));
             }
@@ -86,8 +147,7 @@ public class WeightActivity extends Activity {
         putThing.setOnClickListener(new View.OnClickListener() {
              public void onClick(View view) {
                 EditText text = (EditText) findViewById(R.id.weightInput);
-                PutWeight putAction = new PutWeight(text.getText().toString());
-                putAction.execute();
+                putWeight(text.getText().toString());
              }
         });
         
@@ -96,7 +156,7 @@ public class WeightActivity extends Activity {
             public void onItemSelected(AdapterView<?> parent,
                 View view, int pos, long id) {
                 selectedRecord = (Record)parent.getItemAtPosition(pos);
-                InitializeWeights();
+                getWeights();
             }
 
             public void onNothingSelected(AdapterView<?> arg0) {
@@ -104,224 +164,64 @@ public class WeightActivity extends Activity {
         });
     }
     
+ 
+	@Override
+	protected void onStart() {
+		hvClient.start();
+		super.onStart();
+	}   
+    
     @Override
     protected void onResume()
     {
-        InitializeControls();
+    	InitializeControls();
         super.onResume();
     }
     
     private void InitializeControls() {
-        InitializeRecords();
+    	getRecords();
     }
     
-    private void InitializeWeights() {
-        new InitializeWeights().execute();
-    }
-    
-    private void InitializeRecords() {
-        new InitializeRecords().execute();
-    }
-    
-    private class InitializeRecords extends AsyncTask<Void, Void, Void> {
-        private Exception exception;
-        private List<Record> records = new ArrayList<Record>();
-        private ProgressDialog progressDialog;
-        
-        public InitializeRecords() {
-            progressDialog = ProgressDialog.show(
-                    WeightActivity.this,
-                    "",
-                    "Please wait...", 
-                    true);
-        }
-        
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            try {
-                if (service.getConnectionStatus() == HealthVaultService.ConnectionStatus.Connected) {
-                    List<PersonInfo> personInfos = service.getPersonInfoList();
-                    for (PersonInfo personInfo : personInfos) {
-                        for (Record record : personInfo.getRecords()) {
-                            records.add(record);
-                        }
-                    }
-                    
-                    if (records.size() > 0) {
-                        selectedRecord = records.get(0);                    }
-                }
-            } catch(Exception e) {
-                exception = e;
-            }
-            
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            progressDialog.dismiss();
-            
-            if (exception == null) {
-                Spinner s = (Spinner) findViewById(R.id.spinner);
-                ArrayAdapter<Record> adapter = new ArrayAdapter<Record>(
-                    WeightActivity.this, 
-                    android.R.layout.simple_spinner_item,
-                    records);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                s.setAdapter(adapter);
-            } else {
-                Toast.makeText(
-                        WeightActivity.this, 
-                        "An error occurred.  " + exception.getMessage(), 
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-    
-    /**
-     * The Class PutWeight.
-     */
-    private class PutWeight extends AsyncTask<Void, Void, Void> {
-        private String weight;
-        private Exception exception;
-        ProgressDialog progressDialog;
-        
-        /**
-         * Instantiates a new put weight.
-         * 
-         * @param weight the weight
-         */
-        public PutWeight(String weight) {
-            this.weight = weight;
-            
-            progressDialog = ProgressDialog.show(
-                    WeightActivity.this,
-                    "",
-                    "Please wait for put...", 
-                    true);
-        }
-        
-        /* (non-Javadoc)
-         * @see android.os.AsyncTask#doInBackground(Params[])
-         */
-        protected Void doInBackground(Void... v) {
-            try {
-                EditText text = (EditText) findViewById(R.id.weightInput);
-                putWeight(weight);
-            } catch(Exception e) {
-                exception = e;
-            }
-            
-            return null;
-         }
-                   
-        /* (non-Javadoc)
-         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-         */
-        @Override
-        protected void onPostExecute(Void v) {
-            progressDialog.dismiss();
-
-            if (exception == null) {
-                InitializeWeights();
-            } else {
-                Toast.makeText(
-                    WeightActivity.this, 
-                    "An error occurred.  " + exception.getMessage(), 
-                    Toast.LENGTH_LONG).show();
-            }    
-        }    
-    }
-    
-    private class InitializeWeights extends AsyncTask<Void, Void, Void> {
-        private Exception exception;
-        private List<String> weights = new ArrayList<String>();
-        private ProgressDialog progressDialog;
-        
-        public InitializeWeights() {
-            progressDialog = ProgressDialog.show(
-                WeightActivity.this,
-                "",
-                "Loading data...", 
-                true);
-        }
-        
-        @Override
-        protected Void doInBackground(Void... arg0) {
-            try {
-                if (service.getConnectionStatus() == HealthVaultService.ConnectionStatus.Connected) {
-                    if (selectedRecord != null) {
-                        weights = getWeights();
+    private void getRecords() {
+    	hvClient.asyncRequest(new Callable<List<Record>>() {
+    		public List<Record> call() {
+                ArrayList<Record> records = new ArrayList<Record>();
+                List<PersonInfo> personInfos = service.getPersonInfoList();
+                for (PersonInfo personInfo : personInfos) {
+                    for (Record record : personInfo.getRecords()) {
+                        records.add(record);
                     }
                 }
-            } catch (Exception e) {
-                exception = e;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            progressDialog.dismiss();
-            
-            if (exception == null) {
-                ListView lv = (ListView)findViewById(R.id.weightList);
-                lv.setAdapter(new ArrayAdapter<String>(
-                    WeightActivity.this,
-                    android.R.layout.simple_list_item_1,
-                    weights));
-                //lv.invalidate();
-            } else {
-                Toast.makeText(
-                        WeightActivity.this, 
-                        "An error occurred.  " + exception.getMessage(), 
-                        Toast.LENGTH_LONG).show();
-            }
-        }
+                
+                if (records.size() > 0) {
+                    selectedRecord = records.get(0);
+                }
+                
+                return records;
+    		}
+    	}, 
+    	new WeightCallback(WeightCallback.UpdateRecords));
     }
-                                                                       
-    private void putWeight(String value)
-    {
-        Weight weight = new Weight(Double.parseDouble(value));
-        PersonInfo personInfo = service.getPersonInfoList().get(0);
-        SimpleRequestTemplate template = new SimpleRequestTemplate(
-                service.getConnection(),
-                selectedRecord.getPersonId(),
-                selectedRecord.getId());
-        
-        StringBuilder infoBuilder = new StringBuilder();
-        infoBuilder.append("<info><thing><type-id>");
-        infoBuilder.append(Weight.TYPE);
-        infoBuilder.append("</type-id><data-xml>");
-        infoBuilder.append(weight.toXml());
-        infoBuilder.append("<common/></data-xml></thing></info>");
-        
-        Request request = new Request();
-        request.setMethodName("PutThings");
-        request.setInfo(infoBuilder.toString());
-        template.makeRequest(request);
+    
+    private void putWeight(String value) {
+        final Thing2 thing = new Thing2();
+		thing.setData(new Weight(Double.parseDouble(value)));
+		hvClient.asyncRequest(
+				selectedRecord.putThingAsync(thing),
+				new WeightCallback(WeightCallback.PutWeights));
     }
     
     @SuppressWarnings("unchecked")
-    private List<String> getWeights()
+    private void getWeights()
     {
-        Record record = selectedRecord;
-        
-        ThingStoreProvider provider = new ThingStoreProvider(
-                record.getPersonId(),
-                record.getId());
-        
-        List<Thing2> things = provider.getThingsByType(
-        		com.microsoft.hsg.android.simplexml.things.types.weight.Weight.getThingType());
-        
-        List<String> weights = new ArrayList<String>();
-        for(Thing2 thing: things) {
-        	com.microsoft.hsg.android.simplexml.things.types.weight.Weight w =
-        			(com.microsoft.hsg.android.simplexml.things.types.weight.Weight)thing.getData();
-        	
-        	weights.add(String.valueOf(w.getValue().getKg()));	
-        }
-        
-        return weights;
-    }
+    	hvClient.asyncRequest(
+    			selectedRecord.getThingsAsync(ThingRequestGroup2.thingTypeQuery(Weight.ThingType)),
+    			new WeightCallback(WeightCallback.UpdateWeights));
+    }        
+
+    @Override
+	protected void onStop() {
+    	hvClient.stop();
+		super.onStop();
+	}
 }

@@ -5,6 +5,11 @@ import java.util.Calendar;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.things.types.base.Hour;
+import com.microsoft.hsg.android.simplexml.things.types.base.Millisecond;
+import com.microsoft.hsg.android.simplexml.things.types.base.Minute;
+import com.microsoft.hsg.android.simplexml.things.types.base.Second;
+
 /**
  * 
  * <pre>
@@ -38,117 +43,123 @@ import org.simpleframework.xml.Order;
  * 
  */
 @Order(elements = {
-    "h",
-    "m",
-    "s",
-    "f"
+		"h",
+		"m",
+		"s",
+		"f"
 })
 public class Time {
 
-    @Element(required = false)
-    protected int h;
-    @Element(required = false)
-    protected int m;
-    @Element(required = false)
-    protected Integer s;
-    @Element(required = false)
-    protected Integer f;
+	@Element(required = false)
+	protected Hour h;
+	@Element(required = false)
+	protected Minute m;
+	@Element(required = false)
+	protected Second s;
+	@Element(required = false)
+	protected Millisecond f;
 
-    /**
-     * Gets the value of the h property.
-     * 
-     */
-    public int getH() {
-        return h;
-    }
+	public Time() {
+		h = new Hour();
+		m = new Minute();
+		s = new Second();
+		f = new Millisecond();
+	}
 
-    /**
-     * Sets the value of the h property.
-     * 
-     */
-    public void setH(int value) {
-        this.h = value;
-    }
+	/**
+	 * Gets the value of the h property.
+	 * 
+	 */
+	public int getH() {
+		return h.getValue();
+	}
 
-    /**
-     * Gets the value of the m property.
-     * 
-     */
-    public int getM() {
-        return m;
-    }
+	/**
+	 * Sets the value of the h property.
+	 * 
+	 */
+	public void setH(int value) {
+		this.h = new Hour(value);
+	}
 
-    /**
-     * Sets the value of the m property.
-     * 
-     */
-    public void setM(int value) {
-        this.m = value;
-    }
+	/**
+	 * Gets the value of the m property.
+	 * 
+	 */
+	public int getM() {
+		return m.getValue();
+	}
 
-    /**
-     * Gets the value of the s property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getS() {
-        return s;
-    }
+	/**
+	 * Sets the value of the m property.
+	 * 
+	 */
+	public void setM(int value) {
+		this.m = new Minute(value);
+	}
 
-    /**
-     * Sets the value of the s property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setS(Integer value) {
-        this.s = value;
-    }
+	/**
+	 * Gets the value of the s property.
+	 * 
+	 * @return
+	 *     possible object is
+	 *     {@link Integer }
+	 *     
+	 */
+	public Integer getS() {
+		return s.getValue();
+	}
 
-    /**
-     * Gets the value of the f property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getF() {
-        return f;
-    }
+	/**
+	 * Sets the value of the s property.
+	 * 
+	 * @param value
+	 *     allowed object is
+	 *     {@link Integer }
+	 *     
+	 */
+	public void setS(Integer value) {
+		this.s = new Second(value);
+	}
 
-    /**
-     * Sets the value of the f property.
-     * 
-     * @param value allowed object is
-     * {@link Integer }
-     */
-    public void setF(Integer value) {
-        this.f = value;
-    }
+	/**
+	 * Gets the value of the f property.
+	 * 
+	 * @return
+	 *     possible object is
+	 *     {@link Integer }
+	 *     
+	 */
+	public Integer getF() {
+		return f.getValue();
+	}
 
-    /**
-     * Generate instance from calendar.
-     * 
-     * @param cal the cal
-     * 
-     * @return the time
-     */
-    public static Time fromCalendar(Calendar cal)
-    {
-    	Time time = new Time();
-    	
-    	time.setH(cal.get(Calendar.HOUR_OF_DAY));
-    	time.setM(cal.get(Calendar.MINUTE));
-    	time.setS(cal.get(Calendar.SECOND));
-    	time.setF(cal.get(Calendar.MILLISECOND));
-    	
-    	return time;
-    }
-    
+	/**
+	 * Sets the value of the f property.
+	 * 
+	 * @param value allowed object is
+	 * {@link Integer }
+	 */
+	public void setF(Integer value) {
+		this.f = new Millisecond(value);
+	}
+
+	/**
+	 * Generate instance from calendar.
+	 * 
+	 * @param cal the cal
+	 * 
+	 * @return the time
+	 */
+	public static Time fromCalendar(Calendar cal)
+	{
+		Time time = new Time();
+
+		time.setH(cal.get(Calendar.HOUR_OF_DAY));
+		time.setM(cal.get(Calendar.MINUTE));
+		time.setS(cal.get(Calendar.SECOND));
+		time.setF(cal.get(Calendar.MILLISECOND));
+
+		return time;
+	}
 }

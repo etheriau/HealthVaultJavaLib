@@ -5,7 +5,9 @@ import org.simpleframework.xml.Order;
 
 import com.microsoft.hsg.android.simplexml.things.types.base.CodableValue;
 import com.microsoft.hsg.android.simplexml.things.types.base.GeneralMeasurement;
+import com.microsoft.hsg.android.simplexml.things.types.base.NonNegativeInt;
 import com.microsoft.hsg.android.simplexml.things.types.base.Person;
+import com.microsoft.hsg.android.simplexml.things.types.base.PositiveInt;
 import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
 import com.microsoft.hsg.android.simplexml.things.types.dates.Date;
 
@@ -68,10 +70,10 @@ public class Prescription {
     protected CodableValue substitution;
 
     @Element(required = false)
-    protected Integer refills;
+    protected NonNegativeInt refills;
 
     @Element(name = "days-supply", required=false)
-    protected Integer daysSupply;
+    protected PositiveInt daysSupply;
 
     @Element(name = "prescription-expiration", required=false)
     protected Date prescriptionExpiration;
@@ -184,7 +186,7 @@ public class Prescription {
      *     
      */
     public Integer getRefills() {
-        return refills;
+        return refills == null ? null : refills.getValue();
     }
 
     /**
@@ -196,7 +198,7 @@ public class Prescription {
      *     
      */
     public void setRefills(Integer value) {
-        this.refills = value;
+        this.refills = new NonNegativeInt(value);
     }
 
     /**
@@ -208,7 +210,7 @@ public class Prescription {
      *     
      */
     public Integer getDaysSupply() {
-        return daysSupply;
+        return daysSupply == null ? null : daysSupply.getValue();
     }
 
     /**
@@ -220,7 +222,7 @@ public class Prescription {
      *     
      */
     public void setDaysSupply(Integer value) {
-        this.daysSupply = value;
+        this.daysSupply = new PositiveInt(value);
     }
 
     /**

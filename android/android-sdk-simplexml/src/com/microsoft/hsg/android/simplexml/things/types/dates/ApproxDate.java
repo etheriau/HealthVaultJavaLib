@@ -3,6 +3,10 @@ package com.microsoft.hsg.android.simplexml.things.types.dates;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.things.types.base.Day;
+import com.microsoft.hsg.android.simplexml.things.types.base.Month;
+import com.microsoft.hsg.android.simplexml.things.types.base.Year;
+
 
 /**
  * 
@@ -36,83 +40,88 @@ import org.simpleframework.xml.Order;
  * 
  */
 @Order(elements = {
-    "y",
-    "m",
-    "d"
+		"y",
+		"m",
+		"d"
 })
 public class ApproxDate {
 
-    @Element(required = false)
-    protected int y;
+	@Element(required = false)
+	protected Year y;
 
-    @Element(required = false)
-    protected Integer m;
+	@Element(required = false)
+	protected Month m;
 
-    @Element(required = false)
-    protected Integer d;
+	@Element(required = false)
+	protected Day d;
 
-    /**
-     * Gets the value of the y property.
-     * 
-     */
-    public int getY() {
-        return y;
-    }
+	public ApproxDate() {
+		y = new Year();
+		m = new Month();
+		d = new Day();
+	}
+	
+	/**
+	 * Gets the value of the y property.
+	 * 
+	 */
+	public int getY() {
+		return y.getValue();
+	}
 
-    /**
-     * Sets the value of the y property.
-     * 
-     */
-    public void setY(int value) {
-        this.y = value;
-    }
+	/**
+	 * Sets the value of the y property.
+	 * 
+	 */
+	public void setY(int value) {
+		y = new Year(value);
+	}
 
-    /**
-     * Gets the value of the m property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getM() {
-        return m;
-    }
+	/**
+	 * Gets the value of the m property.
+	 * 
+	 * @return
+	 *     possible object is
+	 *     {@link Integer }
+	 *     
+	 */
+	public int getM() {
+		return m.getValue();
+	}
 
-    /**
-     * Sets the value of the m property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setM(Integer value) {
-        this.m = value;
-    }
+	/**
+	 * Sets the value of the m property.
+	 * 
+	 * @param value
+	 *     allowed object is
+	 *     {@link Integer }
+	 *     
+	 */
+	public void setM(int value) {
+		this.m = new Month(value);
+	}
 
-    /**
-     * Gets the value of the d property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getD() {
-        return d;
-    }
+	/**
+	 * Gets the value of the d property.
+	 * 
+	 * @return
+	 *     possible object is
+	 *     {@link Integer }
+	 *     
+	 */
+	public int getD() {
+		return d.getValue();
+	}
 
-    /**
-     * Sets the value of the d property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setD(Integer value) {
-        this.d = value;
-    }
-
+	/**
+	 * Sets the value of the d property.
+	 * 
+	 * @param value
+	 *     allowed object is
+	 *     {@link Integer }
+	 *     
+	 */
+	public void setD(int value) {
+		d = new Day(value);
+	}
 }

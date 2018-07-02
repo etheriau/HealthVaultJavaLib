@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
+import com.microsoft.hsg.android.simplexml.things.thing.AbstractThing;
 import com.microsoft.hsg.android.simplexml.things.types.base.CodableValue;
 import com.microsoft.hsg.android.simplexml.things.types.base.GeneralMeasurement;
 import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
@@ -68,7 +69,9 @@ import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
     "prescription"
 })
 @Root(name = "medication")
-public class Medication {
+public class Medication extends AbstractThing {
+	
+	public static final String ThingType = "30cafccc-047d-4288-94ef-643571f7919d";
 
     @Element(required = true)
     protected CodableValue name;
@@ -367,8 +370,7 @@ public class Medication {
         this.prescription = value;
     }
 
-	public static String getThingType() {
-		return "30cafccc-047d-4288-94ef-643571f7919d";
+	public String getThingType() {
+		return ThingType; 
 	}
-
 }

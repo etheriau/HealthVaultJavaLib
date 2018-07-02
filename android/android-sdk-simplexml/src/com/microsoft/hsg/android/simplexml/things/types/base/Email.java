@@ -46,7 +46,7 @@ public class Email {
     protected Boolean isPrimary;
 
     @Element(required = true)
-    protected String address;
+    protected EmailAddress address;
 
     /**
      * Gets the value of the description property.
@@ -105,7 +105,7 @@ public class Email {
      *     
      */
     public String getAddress() {
-        return address;
+        return address == null ? null : address.getValue();
     }
 
     /**
@@ -117,7 +117,6 @@ public class Email {
      *     
      */
     public void setAddress(String value) {
-        this.address = value;
+        this.address = new EmailAddress(value);
     }
-
 }

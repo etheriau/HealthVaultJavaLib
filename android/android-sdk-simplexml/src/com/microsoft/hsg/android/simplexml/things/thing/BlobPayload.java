@@ -6,6 +6,9 @@ import java.util.List;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.ThingSectionSpec2;
+import com.microsoft.hsg.android.simplexml.things.types.types.Record;
+
 /**
  * 
  * <pre>
@@ -71,5 +74,59 @@ public class BlobPayload {
         }
         return this.blob;
     }
-
+    
+    public Boolean hasBlobs() {
+    	return blob != null && !blob.isEmpty();
+    }
+    
+    public void addOrUpdateBlob(BlobPayloadItem blobItem) {
+    	if(hasBlobs()) {
+    		int index = this.indexOfBlobNamed(blobItem.getName());
+        	
+        	if(index > 0) {
+        		blob.remove(index);
+        	}
+    	}
+    	
+    	getBlob().add(blobItem);
+    }
+    
+    public BlobPayloadItem getDefaultBlob() {
+    	return getBlobNamed(null);
+    }
+    
+    public BlobPayloadItem getBlobNamed(String name) {
+    	
+    	if(!hasBlobs()) {
+    		return null;
+    	}
+    	
+    	int index = this.indexOfBlobNamed(name);
+    	
+    	if(index < 0) {
+    		return null;
+    	}
+    	
+    	return blob.get(index);
+    }
+    
+    public static BlobPayload getBlobPayload(Record record, ThingKey key) {
+    // Thing2 thing = record.getItem(key, ThingSectionSpec2.blobpayload);
+    // return thing != null ? thing.getBlobPayload() : null;
+    
+    return null;
+    }
+    
+    private int indexOfBlobNamed(String name) {
+    	for(int i = 0; i< blob.size(); i++) {
+			BlobPayloadItem item = blob.get(i);
+			
+			if(item.getName() != null && item.getName().equals(name) 
+					|| name == null && item.getName() == null) {
+				return i;
+			}
+		}
+    	
+    	return -1;
+    }
 }

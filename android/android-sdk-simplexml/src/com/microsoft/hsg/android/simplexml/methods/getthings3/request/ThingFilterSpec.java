@@ -105,6 +105,19 @@ public class ThingFilterSpec {
 
 	@Element(required = false)
 	protected String xpath;
+	
+
+	public ThingFilterSpec() {
+	}
+
+	public ThingFilterSpec(ArrayList<String> typeId) {
+		this.typeId = typeId;
+	}
+	
+	public ThingFilterSpec(String typeId) {
+		this.typeId = new ArrayList<String>();
+		this.typeId.add(typeId);
+	}
 
 	/**
 	 * Gets the value of the typeId property.
@@ -395,5 +408,4 @@ public class ThingFilterSpec {
 	public void setXpath(String value) {
 		this.xpath = value;
 	}
-
 }

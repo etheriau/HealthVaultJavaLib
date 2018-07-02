@@ -13,7 +13,7 @@ public class DurationValue {
 	@Element(name = "start-date", required=true)
     protected ApproxDateTime startDate;
 	
-	@Element(name = "end-date", required=true)
+	@Element(name = "end-date", required=false)
     protected ApproxDateTime endDate;
 	
 	public ApproxDateTime getStartDate() {

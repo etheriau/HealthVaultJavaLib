@@ -5,6 +5,10 @@ import java.util.Calendar;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.things.types.base.Day;
+import com.microsoft.hsg.android.simplexml.things.types.base.Month;
+import com.microsoft.hsg.android.simplexml.things.types.base.Year;
+
 
 /**
  * 
@@ -38,83 +42,88 @@ import org.simpleframework.xml.Order;
  * 
  */
 @Order(elements = {
-    "y",
-    "m",
-    "d"
+		"y",
+		"m",
+		"d"
 })
 public class Date {
 
-    @Element(required = false)
-    protected int y;
+	@Element(required = false)
+	protected Year y;
 
-    @Element(required = false)
-    protected int m;
+	@Element(required = false)
+	protected Month m;
 
-    @Element(required = false)
-    protected int d;
+	@Element(required = false)
+	protected Day d;
 
-    /**
-     * Gets the value of the y property.
-     * 
-     */
-    public int getY() {
-        return y;
-    }
+	public Date() {
+		y = new Year();
+		m = new Month();
+		d = new Day();
+	}
+	/**
+	 * Gets the value of the y property.
+	 * 
+	 */
+	public int getY() {
+		return y.getValue();
+	}
 
-    /**
-     * Sets the value of the y property.
-     * 
-     */
-    public void setY(int value) {
-        this.y = value;
-    }
+	/**
+	 * Sets the value of the y property.
+	 * 
+	 */
+	public void setY(int value) {
+		y = new Year(value);
+	}
 
-    /**
-     * Gets the value of the m property.
-     * 
-     */
-    public int getM() {
-        return m;
-    }
+	/**
+	 * Gets the value of the m property.
+	 * 
+	 */
+	public int getM() {
+		return m.getValue();
+	}
 
-    /**
-     * Sets the value of the m property.
-     * 
-     */
-    public void setM(int value) {
-        this.m = value;
-    }
+	/**
+	 * Sets the value of the m property.
+	 * 
+	 */
+	public void setM(int value) {
+		m = new Month(value);
+	}
 
-    /**
-     * Gets the value of the d property.
-     * 
-     */
-    public int getD() {
-        return d;
-    }
+	/**
+	 * Gets the value of the d property.
+	 * 
+	 */
+	public int getD() {
+		return d.getValue();
+	}
 
-    /**
-     * Sets the value of the d property.
-     * 
-     */
-    public void setD(int value) {
-        this.d = value;
-    }
-    
-    /**
-     * Generate Date instance from calendar.
-     * 
-     * @param cal the cal
-     * 
-     * @return the date
-     */
-    public static Date fromCalendar(Calendar cal)
-    {
-    	Date date = new Date();
-    	date.setD(cal.get(Calendar.DAY_OF_MONTH));
-    	date.setM(cal.get(Calendar.MONTH) + 1);
-    	date.setY(cal.get(Calendar.YEAR));
-    	
-    	return date;
-    }
+	/**
+	 * Sets the value of the d property.
+	 * 
+	 */
+	public void setD(int value) {
+		this.d = new Day(value);
+	}
+
+	/**
+	 * Generate Date instance from calendar.
+	 * 
+	 * @param cal the cal
+	 * 
+	 * @return the date
+	 */
+	public static Date fromCalendar(Calendar cal)
+	{
+		Date date = new Date();
+		date.setD(cal.get(Calendar.DAY_OF_MONTH));
+		date.setM(cal.get(Calendar.MONTH) + 1);
+		date.setY(cal.get(Calendar.YEAR));
+
+		return date;
+	}
 }

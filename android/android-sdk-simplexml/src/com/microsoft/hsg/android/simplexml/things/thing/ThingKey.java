@@ -37,6 +37,14 @@ public class ThingKey {
 
     @Attribute(name = "version-stamp", required = true)
     protected String versionStamp;
+    
+    public ThingKey() {
+    }
+    
+    public ThingKey(String thingId, String versionStamp) {
+    	this.value = thingId;
+    	this.versionStamp = versionStamp;
+    }
 
     /**
      * 

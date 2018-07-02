@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
+import com.microsoft.hsg.android.simplexml.things.thing.AbstractThing;
 import com.microsoft.hsg.android.simplexml.things.types.appointment.DurationValue;
 import com.microsoft.hsg.android.simplexml.things.types.base.CodableValue;
 import com.microsoft.hsg.android.simplexml.things.types.base.GeneralMeasurement;
@@ -20,7 +21,9 @@ import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
 
 @Root(name = "procedure")
 
-public class Procedure {
+public class Procedure extends AbstractThing {
+	
+	public static final String ThingType = "df4db479-a1ba-42a2-8714-2b083b88150f";
 	
     @Element(name = "when", required=true)
     protected ApproxDateTime when;
@@ -79,5 +82,8 @@ public class Procedure {
     	this.secondaryProvider = value;
     }
 
+    public String getThingType() {
+    	return ThingType;
+    }
     
 }

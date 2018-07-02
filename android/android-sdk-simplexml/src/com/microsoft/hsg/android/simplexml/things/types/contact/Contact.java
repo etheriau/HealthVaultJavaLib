@@ -4,6 +4,8 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
+import com.microsoft.hsg.android.simplexml.things.thing.AbstractThing;
+
 /**
  * 
  * <pre>
@@ -44,7 +46,9 @@ import org.simpleframework.xml.Root;
     "contact"
 })
 @Root(name = "contact")
-public class Contact {
+public class Contact extends AbstractThing {
+	
+	public static final String ThingType = "162dd12d-9859-4a66-b75f-96760d67072b";
 
     @Element(required = true)
     protected com.microsoft.hsg.android.simplexml.things.types.base.Contact contact;
@@ -71,6 +75,10 @@ public class Contact {
      */
     public void setContact(com.microsoft.hsg.android.simplexml.things.types.base.Contact value) {
         this.contact = value;
+    }
+    
+    public String getThingType() {
+    	return ThingType;
     }
 
 }

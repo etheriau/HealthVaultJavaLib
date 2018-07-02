@@ -8,18 +8,25 @@ import junit.framework.TestCase;
 
 import android.util.Base64;
 
-import com.microsoft.hsg.android.ConnectionFactory;
-import com.microsoft.hsg.android.HealthVaultService;
+import com.microsoft.hsg.android.simplexml.ConnectionFactory;
+import com.microsoft.hsg.android.simplexml.HealthVaultApp;
 import com.microsoft.hsg.android.simplexml.things.store.impl.ThingStoreProvider;
 import com.microsoft.hsg.android.simplexml.things.thing.Thing2;
 import com.microsoft.hsg.android.simplexml.things.thing.ThingType;
 import com.microsoft.hsg.android.simplexml.things.types.allergy.Allergy;
 import com.microsoft.hsg.android.simplexml.things.types.appointment.Appointment;
+import com.microsoft.hsg.android.simplexml.things.types.base.CodableValue;
+import com.microsoft.hsg.android.simplexml.things.types.base.ConcentrationValue;
+import com.microsoft.hsg.android.simplexml.things.types.base.DisplayValue;
+import com.microsoft.hsg.android.simplexml.things.types.base.NonNegativeDouble;
 import com.microsoft.hsg.android.simplexml.things.types.base.WeightValue;
+import com.microsoft.hsg.android.simplexml.things.types.cholesterol.Cholesterol;
 import com.microsoft.hsg.android.simplexml.things.types.condition.Condition;
 import com.microsoft.hsg.android.simplexml.things.types.dates.DateTime;
 import com.microsoft.hsg.android.simplexml.things.types.medication.Medication;
 import com.microsoft.hsg.android.simplexml.things.types.weight.Weight;
+
+import com.microsoft.hsg.android.simplexml.things.types.immunization.Immunization;
 
 public class DummyThingStoreProviderTest extends TestCase {
 
@@ -32,7 +39,8 @@ public class DummyThingStoreProviderTest extends TestCase {
 	{
 		if (provider == null) {
 		HVSettings settings = new HVSettings();
-		HealthVaultService.initialize(settings);
+		HealthVaultApp app = new HealthVaultApp(settings);
+		HealthVaultApp.setInstance(app);
 	    provider = new ThingStoreProvider(
 		    "3402dc9e-a444-4d96-8004-8b9a165c71f3",
 	        "29a42ebb-397c-4fb5-a6ac-17b17c0c82b7");
@@ -45,29 +53,19 @@ public class DummyThingStoreProviderTest extends TestCase {
 	
 	public void getThingsTest() {
 		Init();
-		List<Thing2> things = provider.getThingsByType(Allergy.getThingType());
-		things = provider.getThingsByType(Appointment.getThingType());
-		things = provider.getThingsByType(Condition.getThingType());
-		things = provider.getThingsByType(Medication.getThingType());
-		things = provider.getThingsByType(Weight.getThingType());
+
+		List<Thing2> things = provider.getThingsByType(Allergy.ThingType);
+		things = provider.getThingsByType(Appointment.ThingType);
+		things = provider.getThingsByType(Condition.ThingType);
+		things = provider.getThingsByType(Medication.ThingType);
+		things = provider.getThingsByType(Weight.ThingType);
 	}
 	
 	public void putThingsTest() {
 		Init();
 		
-		WeightValue wv = new WeightValue();
-		wv.setKg(50);
-		
-		Weight w = new Weight();
-		w.setWhen(DateTime.fromCalendar(Calendar.getInstance()));
-		w.setValue(wv);
-		
-		ThingType type = new ThingType();
-		type.setValue(Weight.getThingType());
-		
 		Thing2 thing = new Thing2();
-		thing.setData(w);
-		thing.setTypeId(type);
+		thing.setData(new Weight(52));
 		
 		ArrayList<Thing2> l = new ArrayList<Thing2>();
 		l.add(thing);
@@ -75,5 +73,72 @@ public class DummyThingStoreProviderTest extends TestCase {
 		provider.putThings(l);
 	}
 	
+	public void getImmunizationTest() {
+		Init();
+		List<Thing2> things = provider.getThingsByType(Immunization.ThingType);
+	}
 	
+	public void putImmunizationTest() {
+		Init();
+		
+		Immunization immunization = new Immunization();
+		
+		CodableValue cv = new CodableValue();
+		cv.setText("someText");
+		
+		immunization.setName(cv);
+		
+		ThingType type = new ThingType();
+		type.setValue(Immunization.ThingType);
+		
+		Thing2 thing = new Thing2();
+		thing.setData(immunization);
+		thing.setTypeId(type);
+		
+		ArrayList<Thing2> l = new ArrayList<Thing2>();
+		l.add(thing);
+		
+		provider.putThings(l);
+	}
+	
+	public void getCholesterolTest() {
+		Init();
+		List<Thing2> things = provider.getThingsByType(Cholesterol.ThingType);
+	}
+	
+	public void putCholesterolTest() {
+		Init();
+		
+		Cholesterol cholesterol = new Cholesterol();
+		cholesterol.setWhen(DateTime.fromCalendar(Calendar.getInstance()));
+		
+		ConcentrationValue ldl = new ConcentrationValue();
+		// NonNegativeDouble value = new NonNegativeDouble(20);
+		ldl.setValue(20);
+		
+		DisplayValue disVal = new DisplayValue();
+		disVal.setText("someval");
+		disVal.setUnits("someunits");
+		ldl.setDisplayValue(disVal);
+		
+		cholesterol.setLdl(ldl);
+		
+		ThingType type = new ThingType();
+		type.setValue(Cholesterol.ThingType);
+		
+		Thing2 thing = new Thing2();
+		thing.setData(cholesterol);
+		thing.setTypeId(type);
+		
+		ArrayList<Thing2> l = new ArrayList<Thing2>();
+		l.add(thing);
+		
+		provider.putThings(l);
+	}
+	
+	public void getAllergyThingsTest() {
+		Init();
+
+		List<Thing2> things = provider.getThingsByType(Allergy.ThingType);
+	}
 }

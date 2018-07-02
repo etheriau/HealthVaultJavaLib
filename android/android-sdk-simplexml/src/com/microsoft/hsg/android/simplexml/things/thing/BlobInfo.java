@@ -3,6 +3,9 @@ package com.microsoft.hsg.android.simplexml.things.thing;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.things.types.base.StringZ1024;
+import com.microsoft.hsg.android.simplexml.things.types.base.StringZ255;
+
 /**
  * 
  * <pre>
@@ -41,12 +44,26 @@ import org.simpleframework.xml.Order;
 public class BlobInfo {
 
     @Element(required = false)
-    protected String name;
+    protected StringZ255 name;
 
     @Element(name = "content-type", required = true)
-    protected String contentType;
+    protected StringZ1024 contentType;
 
-    /**
+    public BlobInfo() {
+    	
+    }
+    
+    public BlobInfo(String contentType) {
+    	this("", contentType);
+    }
+    
+    
+    public BlobInfo(String name, String contentType) {
+    	this.name = new StringZ255(name);
+    	this.contentType = new StringZ1024(contentType);
+	}
+
+	/**
      * Gets the value of the name property.
      * 
      * @return
@@ -55,7 +72,7 @@ public class BlobInfo {
      *     
      */
     public String getName() {
-        return name;
+        return name == null ? null : name.getValue();
     }
 
     /**
@@ -67,7 +84,7 @@ public class BlobInfo {
      *     
      */
     public void setName(String value) {
-        this.name = value;
+        this.name = new StringZ255(value);
     }
 
     /**
@@ -79,7 +96,7 @@ public class BlobInfo {
      *     
      */
     public String getContentType() {
-        return contentType;
+        return contentType == null ? null : contentType.getValue();
     }
 
     /**
@@ -91,6 +108,6 @@ public class BlobInfo {
      *     
      */
     public void setContentType(String value) {
-        this.contentType = value;
+        this.contentType = new StringZ1024(value);
     }
 }

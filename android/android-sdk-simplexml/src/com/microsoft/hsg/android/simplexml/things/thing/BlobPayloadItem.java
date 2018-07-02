@@ -1,7 +1,13 @@
 package com.microsoft.hsg.android.simplexml.things.thing;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
+
+import com.microsoft.hsg.android.simplexml.things.types.types.Record;
 
 /**
  * 
@@ -210,5 +216,12 @@ public class BlobPayloadItem {
     public void setCurrentContentEncoding(String value) {
         this.currentContentEncoding = value;
     }
-
+    
+    public String getName() {
+    	return blobInfo != null ? blobInfo.getName() : "";
+    }
+    
+    public void download(Record record, OutputStream destination) throws URISyntaxException, IOException {
+    	record.downloadBlob(this, destination);
+    }
 }

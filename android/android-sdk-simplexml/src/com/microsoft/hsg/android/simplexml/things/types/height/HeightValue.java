@@ -3,6 +3,9 @@ package com.microsoft.hsg.android.simplexml.things.types.height;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.things.types.base.DisplayValue;
+import com.microsoft.hsg.android.simplexml.things.types.base.PositiveDouble;
+
 @Order(elements = {
 	    "m",
 	    "display"
@@ -13,32 +16,24 @@ import org.simpleframework.xml.Order;
 public class HeightValue {
 	
 	@Element(name = "m", required=true)
-    protected double m;
+    protected PositiveDouble m;
 
 	@Element(name="display", required=false)
-//	protected DisplayValue display;
-	protected double display;
+	protected DisplayValue display;
 	
-	public double getM() {
-		return m;
+	public Double getM() {
+		return m == null ? null : m.getValue();
 	}
 	
 	public void setM(double value) {
-		this.m = value;
+		this.m = new PositiveDouble(value);
 	}
 	
-	public double getDisplay() {
-		return display;
-	}
-	
-	public void setDisplay(double value) {
-		this.display = value;
-	}
-/*	public DisplayValue getDisplay() {
+	public DisplayValue getDisplay() {
 		return display;
 	}
 	
 	public void setDisplay(DisplayValue value) {
 		this.display = value;
-	}*/
+	}
 }

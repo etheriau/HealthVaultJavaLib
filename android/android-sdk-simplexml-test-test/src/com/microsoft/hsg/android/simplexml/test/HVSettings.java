@@ -1,9 +1,12 @@
 package com.microsoft.hsg.android.simplexml.test;
 
-import com.microsoft.hsg.android.HealthVaultService.ConnectionStatus;
-import com.microsoft.hsg.android.HealthVaultSettings;
+import com.microsoft.hsg.android.simplexml.HealthVaultApp.ConnectionStatus;
+import com.microsoft.hsg.android.simplexml.HealthVaultSettings;
 
 public class HVSettings implements HealthVaultSettings {
+	
+	private String appId;
+	private String authSecret;
 
 	@Override
 	public boolean getIsMultiInstanceAware() {
@@ -42,14 +45,12 @@ public class HVSettings implements HealthVaultSettings {
 
 	@Override
 	public String getAppId() {
-		// TODO Auto-generated method stub
-		return null;
+		return appId;
 	}
 
 	@Override
 	public void setAppId(String appid) {
-		// TODO Auto-generated method stub
-
+		this.appId = appid;
 	}
 
 	@Override
@@ -66,14 +67,12 @@ public class HVSettings implements HealthVaultSettings {
 
 	@Override
 	public String getAuthenticationSecret() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.authSecret;
 	}
 
 	@Override
 	public void setAuthenticationSecret(String secret) {
-		// TODO Auto-generated method stub
-
+		this.authSecret = secret;
 	}
 
 	@Override
@@ -86,6 +85,29 @@ public class HVSettings implements HealthVaultSettings {
 	public void setConnectionStatus(ConnectionStatus status) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public boolean getIsMRA() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void setIsMRA(boolean isAware) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void setAuthorizedRecordsResponse(String response) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getAuthorizedRecordsResponse() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

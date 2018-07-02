@@ -1,6 +1,5 @@
 package com.microsoft.hsg.android.simplexml.methods.getthings3.request;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,9 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.methods.getthings3.request.BlobPayloadRequest.BlobFormat;
 import com.microsoft.hsg.android.simplexml.things.thing.ThingKey;
+import com.microsoft.hsg.android.simplexml.things.types.base.NonNegativeInt;
 
 /**
  * <p>Java class for ThingRequestGroup2 complex type.
@@ -51,16 +52,16 @@ import com.microsoft.hsg.android.simplexml.things.thing.ThingKey;
 public class ThingRequestGroup2 {
 
     @ElementList(required=false, inline=true, entry="id")
-    protected ArrayList<String> id;
+    protected ArrayList<String> thingIdList;
 
     @ElementList(required=false, inline=true, entry="key")
     protected ArrayList<ThingKey> key;
 
     @ElementList(required=false, inline=true, entry="client-thing-id")
-    protected ArrayList<String> clientThingId;
+    protected ArrayList<String> clientThingIdList;
 
     @ElementList(required=false, inline=true, entry="filter")
-    protected ArrayList<ThingFilterSpec> filter;
+    protected ArrayList<ThingFilterSpec> filterList;
 
     @Element(required = true)
     protected ThingFormatSpec2 format;
@@ -70,7 +71,7 @@ public class ThingRequestGroup2 {
 
     @Attribute(required=false, name = "name")
     protected String name;
-
+    
     @Attribute(required=false, name = "max")
     protected Integer max;
 
@@ -99,11 +100,11 @@ public class ThingRequestGroup2 {
      * 
      * 
      */
-    public List<String> getId() {
-        if (id == null) {
-            id = new ArrayList<String>();
+    public List<String> getThingIdList() {
+        if (thingIdList == null) {
+            thingIdList = new ArrayList<String>();
         }
-        return this.id;
+        return this.thingIdList;
     }
 
     /**
@@ -128,7 +129,7 @@ public class ThingRequestGroup2 {
      * 
      * 
      */
-    public List<ThingKey> getKey() {
+    public List<ThingKey> getKeyList() {
         if (key == null) {
             key = new ArrayList<ThingKey>();
         }
@@ -157,11 +158,11 @@ public class ThingRequestGroup2 {
      * 
      * 
      */
-    public List<String> getClientThingId() {
-        if (clientThingId == null) {
-            clientThingId = new ArrayList<String>();
+    public List<String> getClientThingIdList() {
+        if (clientThingIdList == null) {
+            clientThingIdList = new ArrayList<String>();
         }
-        return this.clientThingId;
+        return this.clientThingIdList;
     }
 
     /**
@@ -186,11 +187,11 @@ public class ThingRequestGroup2 {
      * 
      * 
      */
-    public List<ThingFilterSpec> getFilter() {
-        if (filter == null) {
-            filter = new ArrayList<ThingFilterSpec>();
+    public List<ThingFilterSpec> getFilterList() {
+        if (filterList == null) {
+            filterList = new ArrayList<ThingFilterSpec>();
         }
-        return this.filter;
+        return this.filterList;
     }
 
     /**
@@ -202,6 +203,10 @@ public class ThingRequestGroup2 {
      *     
      */
     public ThingFormatSpec2 getFormat() {
+    	if(format == null) {
+    		format = new ThingFormatSpec2();
+    		format.getXml().add("");
+    	}
         return format;
     }
 
@@ -270,7 +275,7 @@ public class ThingRequestGroup2 {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
     public Integer getMax() {
@@ -282,11 +287,12 @@ public class ThingRequestGroup2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
     public void setMax(Integer value) {
-        this.max = value;
+        NonNegativeInt maxValue = new NonNegativeInt(value);
+        this.max = maxValue.getValue();
     }
 
     /**
@@ -294,7 +300,7 @@ public class ThingRequestGroup2 {
      * 
      * @return
      *     possible object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
     public Integer getMaxFull() {
@@ -306,11 +312,99 @@ public class ThingRequestGroup2 {
      * 
      * @param value
      *     allowed object is
-     *     {@link BigInteger }
+     *     {@link Integer }
      *     
      */
     public void setMaxFull(Integer value) {
-        this.maxFull = value;
+        NonNegativeInt maxFullValue = new NonNegativeInt(value);
+        this.maxFull = maxFullValue.getValue();
     }
-
+    
+    
+    public static ThingRequestGroup2 thingTypeQuery(String thingType) {
+		ThingRequestGroup2 requestGroup = new ThingRequestGroup2();
+		requestGroup.name = thingType;
+		
+		ThingFilterSpec filter = new ThingFilterSpec(thingType);
+		requestGroup.getFilterList().add(filter);
+		
+		requestGroup.getFormat().getTypeVersionFormat().add(thingType);
+		
+		return requestGroup;
+	}
+    
+    public static ThingRequestGroup2 thingTypeQuery(String thingType, BlobFormatSpec blobFormatSpec) {
+    	ThingRequestGroup2 requestGroup = thingTypeQuery(thingType);
+    	
+    	ThingFormatSpec2 formatSpec = new ThingFormatSpec2();
+		BlobFormat format = new BlobFormat();
+		format.setBlobFormatSpec(blobFormatSpec);
+		
+		BlobPayloadRequest blobPayload = new BlobPayloadRequest();
+		blobPayload.setBlobFormat(format);
+		
+		formatSpec.setSection(ThingSectionSpec2.core).setSection(ThingSectionSpec2.blobpayload);
+		formatSpec.getXml().add("");
+		formatSpec.setBlobPayloadRequest(blobPayload);
+		
+		requestGroup.setFormat(formatSpec);
+		
+		return requestGroup;
+	}
+    
+    public static ThingRequestGroup2 keyQuery(ThingKey key) {
+    	ThingRequestGroup2 requestGroup = new ThingRequestGroup2();
+    	requestGroup.key = new ArrayList<ThingKey>();
+    	requestGroup.key.add(key);
+    	
+    	return requestGroup;
+    }
+    
+    public static ThingRequestGroup2 keysQuery(ArrayList<ThingKey> keys) {
+    	ThingRequestGroup2 requestGroup = new ThingRequestGroup2();
+    	requestGroup.key = new ArrayList<ThingKey>();
+    	requestGroup.key.addAll(keys);
+    	
+    	return requestGroup;
+    }
+    
+    public static ThingRequestGroup2 keysQuery(ArrayList<ThingFilterSpec> filters, int maxResults) {
+    	ThingRequestGroup2 requestGroup = new ThingRequestGroup2();
+    	requestGroup.getFormat().setSection(ThingSectionSpec2.core);
+    	requestGroup.getFilterList().addAll(filters);
+    	requestGroup.setMaxFull(0);
+    	
+    	if(maxResults > 0) {
+    		requestGroup.setMax(maxResults);
+    	}
+    	
+    	return requestGroup;
+    }
+	
+	private static ThingFilterSpec getThingFilterSpec(String thingType) {
+		ThingFilterSpec fs = new ThingFilterSpec();
+		fs.getTypeId().add(thingType);
+		
+		return fs;
+	}
+	
+	private static ThingFormatSpec2 getFormatSpec() {
+		ThingFormatSpec2 format = new ThingFormatSpec2();
+		format.getSection().add(ThingSectionSpec2.core);
+		format.getSection().add(ThingSectionSpec2.blobpayload);
+		format.getXml().add("");
+		format.setBlobPayloadRequest(getBlobPayloadRequest());
+		
+		return format;
+	}
+	
+	private static BlobPayloadRequest getBlobPayloadRequest() {
+		BlobFormat format = new BlobFormat();
+		format.setBlobFormatSpec(BlobFormatSpec.streamed);
+		
+		BlobPayloadRequest blobPayload = new BlobPayloadRequest();
+		blobPayload.setBlobFormat(format);
+		
+		return blobPayload;
+	}
 }

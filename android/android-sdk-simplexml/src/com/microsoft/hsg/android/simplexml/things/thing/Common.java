@@ -7,6 +7,8 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Order;
 
+import com.microsoft.hsg.android.simplexml.things.types.base.String255;
+
 /**
  * 
  * <pre>
@@ -60,14 +62,14 @@ public class Common {
     @Element(required=false)
     protected String tags;
     
-    @ElementList(required=false, inline=false, entry="extension")
+    @ElementList(required=false, inline=true, entry="extension")
     protected ArrayList<Extension> extension;
 
     @ElementList(required=false, inline=true, entry="related-thing")
     protected List<RelatedThing> relatedThing;
 
     @Element(name = "client-thing-id", required=false)
-    protected String clientThingId;
+    protected String255 clientThingId;
 
     /**
      * Gets the value of the source property.
@@ -208,7 +210,7 @@ public class Common {
      *     
      */
     public String getClientThingId() {
-        return clientThingId;
+        return clientThingId == null ? null : clientThingId.getValue();
     }
 
     /**
@@ -220,7 +222,7 @@ public class Common {
      *     
      */
     public void setClientThingId(String value) {
-        this.clientThingId = value;
+        this.clientThingId = new String255(value);
     }
 
 }

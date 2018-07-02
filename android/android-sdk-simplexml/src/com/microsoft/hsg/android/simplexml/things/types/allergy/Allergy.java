@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Order;
 import org.simpleframework.xml.Root;
 
+import com.microsoft.hsg.android.simplexml.things.thing.AbstractThing;
 import com.microsoft.hsg.android.simplexml.things.types.base.CodableValue;
 import com.microsoft.hsg.android.simplexml.things.types.base.Person;
 import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
@@ -61,7 +62,9 @@ import com.microsoft.hsg.android.simplexml.things.types.dates.ApproxDateTime;
     "is-negated"
 })
 @Root(name = "allergy")
-public class Allergy {
+public class Allergy extends AbstractThing {
+
+	public static final String ThingType = "52bf9104-2c5e-4f1f-a66d-552ebcc53df7";
 
     @Element(required = true)
     protected CodableValue name;
@@ -284,8 +287,7 @@ public class Allergy {
 		return getName().getText();
 	}
 
-	public static String getThingType() {
-		return "52bf9104-2c5e-4f1f-a66d-552ebcc53df7";
+	public String getThingType() {
+		return ThingType; 
 	}
-
 }

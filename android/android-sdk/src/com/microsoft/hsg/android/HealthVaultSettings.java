@@ -120,6 +120,10 @@ public interface HealthVaultSettings {
      */
     public void setConnectionStatus(HealthVaultService.ConnectionStatus status);
     
+    public boolean getIsMRA();
+    
+    public void setIsMRA(boolean isMRA);
+    
     /**
      * Save.
      */

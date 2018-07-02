@@ -6,7 +6,7 @@
 	<groupId>com.microsoft.hsg</groupId>
 	<artifactId>ui-sdk</artifactId>
 	<packaging>war</packaging>
-	<version>1.5</version>
+	<version>1.6</version>
 	<!-- TODO project name  -->
 	<name>ui-sdk</name>
 	<description></description>
@@ -28,7 +28,7 @@
     <parent>
         <groupId>com.microsoft.hsg</groupId>
         <artifactId>hv-examples</artifactId>
-        <version>1.5</version>
+        <version>1.6</version>
     </parent>
 	<dependencies>
 		<!--  WICKET DEPENDENCIES -->
@@ -90,7 +90,7 @@
 		<dependency>
 			<groupId>com.microsoft.hsg</groupId>
 			<artifactId>hv-sdk</artifactId>
-			<version>1.5</version>
+			<version>1.6</version>
 		</dependency>
 	</dependencies>
 

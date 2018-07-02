@@ -26,56 +26,47 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.microsoft.hsg.android.HealthVaultFileSettings;
-import com.microsoft.hsg.android.HealthVaultInitializationHandler;
-import com.microsoft.hsg.android.HealthVaultService;
-import com.microsoft.hsg.android.HealthVaultSettings;
+import com.microsoft.hsg.android.simplexml.HealthVaultFileSettings;
+import com.microsoft.hsg.android.simplexml.HealthVaultInitializationHandler;
+import com.microsoft.hsg.android.simplexml.HealthVaultApp;
+import com.microsoft.hsg.android.simplexml.HealthVaultSettings;
 
 public class Welcome 
 	extends Activity
 	implements HealthVaultInitializationHandler {
 
-    private HealthVaultService service;
+    private HealthVaultApp service;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome);
         
-        service = HealthVaultService.initialize(this);
-        HealthVaultSettings settings = service.getSettings();
-        
-        if (settings.getConnectionStatus() == HealthVaultService.ConnectionStatus.Connected)
-        {
-        	OnConnected();
-        }
-        else
-        {
-		    //settings.setMasterAppId("c6ba979f-c342-4408-a2bc-0dfb43b2bf8d");
-		    settings.setMasterAppId("7f10953a-9697-4170-8961-e37dbdefe950");
-		    //settings.setServiceUrl("https://platform.healthvault-ppe.com/platform/wildcat.ashx");
-		    settings.setServiceUrl("https://hstestplatform1/platform/wildcat.ashx");
-		    //settings.setShellUrl("https://account.healthvault-ppe.com");
-		    settings.setShellUrl("https://hstestaccount1.dns.microsoft.com");
-		    settings.setIsMultiInstanceAware(true);   
-        }
-        
+        service = HealthVaultApp.getInstance(this);
         
         Button go = (Button) findViewById(R.id.goButton);
         go.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            	service.connect(Welcome.this, Welcome.this);
+            	service.start(Welcome.this, Welcome.this);
             }
         });
+        
+        InitializeControls();
     }
 
     @Override
     protected void onResume() {
-    	if (service.getSettings().getConnectionStatus() == HealthVaultService.ConnectionStatus.Connected) {
-        	OnConnected();
-        }
-    	
-        InitializeControls();
+    	if (service.getConnectionStatus() == HealthVaultApp.ConnectionStatus.Connected) {
+    		onConnected();
+    	}
+    	else 
+    	{
+    		HealthVaultSettings settings = service.getSettings();
+    		settings.setMasterAppId("c6ba979f-c342-4408-a2bc-0dfb43b2bf8d");
+		    settings.setServiceUrl("https://platform.healthvault-ppe.com/platform/wildcat.ashx");
+		    settings.setShellUrl("https://account.healthvault-ppe.com");
+		    settings.setIsMultiInstanceAware(true);   
+    	}
         super.onResume();
     }
     
@@ -92,7 +83,7 @@ public class Welcome
     }
 
 	@Override
-	public void OnConnected() {
+	public void onConnected() {
 		Intent intent = new Intent(Welcome.this, WeightActivity.class);
         startActivity(intent);
         finish();

@@ -5,8 +5,8 @@ import java.util.List;
 import android.util.Base64;
 
 import com.microsoft.hsg.Connection;
-import com.microsoft.hsg.android.ConnectionFactory;
-import com.microsoft.hsg.android.HealthVaultService;
+import com.microsoft.hsg.android.simplexml.ConnectionFactory;
+import com.microsoft.hsg.android.simplexml.HealthVaultApp;
 import com.microsoft.hsg.android.simplexml.methods.getthings3.request.BlobFormatSpec;
 import com.microsoft.hsg.android.simplexml.methods.getthings3.request.BlobPayloadRequest;
 import com.microsoft.hsg.android.simplexml.methods.getthings3.request.GetThings3Request;
@@ -83,7 +83,7 @@ public class ThingStoreProvider implements ThingProvider {
 	private static ThingRequestGroup2 getRequestGroup(String thingType) {
 		ThingRequestGroup2 requestGroup = new ThingRequestGroup2();
 		requestGroup.setMax(25);
-		requestGroup.getFilter().add(getThingFilterSpec(thingType));
+		requestGroup.getFilterList().add(getThingFilterSpec(thingType));
 		requestGroup.setFormat(getFormat());
 		
 		return requestGroup;
@@ -108,7 +108,7 @@ public class ThingStoreProvider implements ThingProvider {
 	
 	private static BlobPayloadRequest getBlobPayloadRequest() {
 		BlobFormat format = new BlobFormat();
-		format.setBlobFormatSpec(BlobFormatSpec.inline);
+		format.setBlobFormatSpec(BlobFormatSpec.streamed);
 		
 		BlobPayloadRequest blobPayload = new BlobPayloadRequest();
 		blobPayload.setBlobFormat(format);
@@ -118,7 +118,7 @@ public class ThingStoreProvider implements ThingProvider {
 	
 	private Connection getConnection() {
 		if (connection == null) {
-			connection = HealthVaultService.getInstance().getConnection();
+			connection = HealthVaultApp.getInstance().getConnection();
 		}
 		
 		return connection;
