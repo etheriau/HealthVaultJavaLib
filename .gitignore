@@ -1,0 +1,6 @@
+.idea/
+java-1.4.2/sdk/target/
+sdk/target/
+hv-jaxb/target/
+examples/ui-jaxb/target/
+examples/ui-sdk/target/
