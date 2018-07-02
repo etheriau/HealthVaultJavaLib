@@ -61,6 +61,13 @@ public class HealthVaultService {
         return instance;
     }
     
+    public static HealthVaultService initialize(HealthVaultSettings settings) {
+    	HealthVaultService service = new HealthVaultService(settings);
+    	instance = service;
+    	
+    	return instance;
+    }
+    
     /**
      * Gets the single instance of HealthVaultService.
      * 
