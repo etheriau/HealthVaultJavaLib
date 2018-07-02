@@ -19,7 +19,6 @@ import java.io.InputStream;
 
 import org.apache.wicket.Session;
 
-import com.microsoft.hsg.Connection;
 import com.microsoft.hsg.ConnectionFactory;
 import com.microsoft.hsg.HVAccessor;
 import com.microsoft.hsg.HVException;
@@ -27,11 +26,8 @@ import com.microsoft.hsg.Request;
 
 public class RequestTemplate
 {
-	Connection connection;
-
-	public RequestTemplate(Connection connection)
+	public RequestTemplate()
 	{
-		this.connection = connection;
 	}
 	
 	public Integer makeRequest(Request request)

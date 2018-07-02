@@ -28,16 +28,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import com.microsoft.hsg.Connection;
 import com.microsoft.hsg.Request;
 
 public class WeightDAO
 {
-	private Connection connection;
-	
-	public WeightDAO(Connection connection)
+	public WeightDAO()
 	{
-		this.connection = connection;
 	}
 	
 	public List<WeightInfo> getWeights()
@@ -50,7 +46,7 @@ public class WeightDAO
 				WeightInfo.WeightType +
 				"</type-id></filter><format><section>core</section><xml/></format></group></info>");
 		
-		RequestTemplate template = new RequestTemplate(connection);
+		RequestTemplate template = new RequestTemplate();
 		return template.makeRequest(request, new Marshaller<List<WeightInfo>>() {
 			public List<WeightInfo> marshal(InputStream istream) throws Exception {
 				InputSource isource = new InputSource(istream);
@@ -103,7 +99,7 @@ public class WeightDAO
 		request.setMethodName("PutThings");
 		request.setInfo(infoBuilder.toString());
 		
-		RequestTemplate template = new RequestTemplate(connection);
+		RequestTemplate template = new RequestTemplate();
 		template.makeRequest(request);
 	}
 }

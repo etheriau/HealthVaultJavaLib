@@ -28,8 +28,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.value.ValueMap;
 
-import com.microsoft.hsg.ConnectionFactory;
-
 /**
  * Homepage
  */
@@ -57,7 +55,7 @@ public class WeightPage extends WebPage {
 	
 	private List<WeightInfo> getWeights()
 	{
-		WeightDAO dao = new WeightDAO(ConnectionFactory.getConnection());
+		WeightDAO dao = new WeightDAO();
 		return dao.getWeights();
 	}
   
@@ -77,7 +75,7 @@ public class WeightPage extends WebPage {
     		
     		WeightInfo wi = new WeightInfo();
     		wi.setValue(weightInput);
-    		WeightDAO dao = new WeightDAO(ConnectionFactory.getConnection());
+    		WeightDAO dao = new WeightDAO();
     		dao.putWeight(wi);
     		thingList.setList(getWeights());
     	}
