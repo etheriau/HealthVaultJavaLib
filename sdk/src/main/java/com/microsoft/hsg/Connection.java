@@ -26,7 +26,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The connection serves as the main pipe to HealthVault.  It
@@ -42,7 +43,7 @@ public class Connection
     private Transport transport;
     private Authenticator authenticator;
 
-    private static Logger logger = Logger.getLogger(Connection.class);
+    private static Logger logger = LoggerFactory.getLogger(Connection.class);
     /**
      * Gets the app id.
      * 
@@ -99,7 +100,8 @@ public class Connection
 	 */
 	public void setSharedSecret(byte[] sharedSecret) {
 		this.sharedSecret = sharedSecret;
-	}	
+	}
+	
 	/**
 	 * Gets the transport.
 	 * 

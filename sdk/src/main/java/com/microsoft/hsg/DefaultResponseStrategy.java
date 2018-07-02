@@ -22,7 +22,8 @@ import java.io.InputStream;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 /**
@@ -32,7 +33,7 @@ import org.xml.sax.InputSource;
 public class DefaultResponseStrategy
 implements ResponseStrategy
 {
-	static Logger logger = Logger.getLogger(ResponseStrategy.class);
+	static Logger logger = LoggerFactory.getLogger(ResponseStrategy.class);
 
 
 	/**
