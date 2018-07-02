@@ -15,6 +15,8 @@
  */
 package com.microsoft.hsg;
 
+import java.io.FileInputStream;
+
 import java.security.Key;
 import java.security.KeyStore;
 import java.security.MessageDigest;
@@ -50,6 +52,7 @@ implements PrivateKeyStore
 	private String filename;
 	private PrivateKey privateKey;
 	private String thumbprint;
+	private boolean useFileOpen = false;
 	private boolean initialized = false;
 	
 	/**
@@ -64,13 +67,34 @@ implements PrivateKeyStore
 
 	/**
 	 * Sets the filename.  The filename should be resolvable
-	 * from the classpath using getResourceAsStream()
+	 * from the classpath using getResourceAsStream() if
+	 * useFileOpen is false.
 	 * 
 	 * @param filename the new filename
 	 */
 	public void setFilename(String filename)
 	{
 		this.filename = filename;
+	}
+
+	/**
+	 * Determines if the filename should be opened via a file stream
+	 * instead of a stream.
+	 */
+	public boolean shouldUseFileOpen() {
+		return this.useFileOpen;
+	}
+
+	/**
+	 * Configure the way to resolve the filename.  If this is false,
+	 * the filename will be resolved via getResourceAsStream().
+	 * Otherwise it will be resolved via a file-open.
+	 *
+	 * @param useFileOpen True to use the file-open semantics. False
+	 *                    to use getResourceAsStream();
+	*/
+	public void setUseFileOpen( boolean useFileOpen ) {
+		this.useFileOpen = useFileOpen;
 	}
 
 	/**
@@ -141,9 +165,22 @@ implements PrivateKeyStore
     		if (!initialized)
     		{
                 KeyStore keystore = KeyStore.getInstance("JKS");
-                keystore.load(Connection.class
-                      .getResourceAsStream(filename), 
-                      password.toCharArray());
+		if ( ! useFileOpen ) {
+                	keystore.load(Connection.class
+                                      .getResourceAsStream(filename), 
+                                      password.toCharArray());
+		}
+		else
+		{
+			FileInputStream stream = new FileInputStream( filename );
+			try
+			{
+				keystore.load( stream, password.toCharArray() );
+			}
+			finally {
+				stream.close();
+			}
+                }
                 Key key = keystore.getKey(alias, password.toCharArray());
                 if (key == null)
                 {
