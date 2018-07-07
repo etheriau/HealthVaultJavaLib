@@ -3,6 +3,8 @@ This project was imported from https://archive.codeplex.com/?p=healthvaultjavali
 It contains the latest 1.6.0 version from there plus the patches I have submitted
 to that project over the time it was maintained on that project.
 
+The official Microsoft version is in https://github.com/microsoft/healthvault-java-sdk
+
 ==================================================================================
 
 This project comprises an SDK to access HealthVault and some sample ui's
