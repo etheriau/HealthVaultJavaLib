@@ -4,13 +4,13 @@
   <groupId>com.microsoft.hsg</groupId>
   <artifactId>hv-sdk</artifactId>
   <packaging>jar</packaging>
-  <version>1.6</version>
+  <version>1.6.1</version>
   <name>hv-sdk</name>
   <url>http://maven.apache.org</url>
   <parent>
     <groupId>com.microsoft.hsg</groupId>
     <artifactId>hv</artifactId>
-    <version>1.6</version>
+    <version>1.6.1</version>
   </parent>
   
   <build>
