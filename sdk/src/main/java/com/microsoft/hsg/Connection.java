@@ -261,7 +261,7 @@ public class Connection
         //sb.append(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()).toXMLFormat());
         sb.append("</msg-time><msg-ttl>");
         sb.append(request.getTtl());
-        sb.append("</msg-ttl><version>Java/1.3.0 JDK-1.5+</version>");
+        sb.append("</msg-ttl><version>Java/1.6.1 JDK-1.5+</version>");
         
         if (sessionToken != null)
         {
