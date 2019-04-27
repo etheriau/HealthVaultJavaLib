@@ -31,7 +31,7 @@ Building:
 
 Running the Sample:
     You can run the app directly from the command line with maven:
-    > cd samle/jaxb-ui
+    > cd sample/jaxb-ui
     > mvn jetty:run
     Point your web browser at http://localhost:8080/jwildcat-ui
 
