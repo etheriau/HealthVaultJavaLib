@@ -1,3 +1,5 @@
+## Overview of this repository
+
 This project was imported from https://archive.codeplex.com/?p=healthvaultjavalib
 
 It contains the latest 1.6.0 version from there plus the patches I have submitted
@@ -10,99 +12,147 @@ The official Microsoft version is in https://github.com/microsoft/healthvault-ja
 This also includes differences from https://github.com/CHBase/chbase-java-sdk for
 support CHBase.
 
-==================================================================================
+Versions of the compiled library is available for easy use within maven and gradle
+projects.
 
-This project comprises an SDK to access HealthVault and some sample ui's
+For Maven:
+
+    <!-- Add respository -->
+    <repositories>
+      <repository>
+        <id>eric-theriault-open-source</id>
+        <url>https://dl.cloudsmith.io/public/eric-theriault/open-source/maven</url>
+        <releases>
+          <enabled>true</enabled>
+          <updatePolicy>always</updatePolicy>
+        </releases>
+        <snapshots>
+          <enabled>true</enabled>
+          <updatePolicy>always</updatePolicy>
+        </snapshots>
+      </repository>
+    </repositories>
+
+    <!-- Then add the dependency -->
+    <dependency>
+      <groupId>healthvault</groupId>
+      <artifactId>hv-sdk</artifactId>
+      <version>1.6.1</version>
+    </dependency>
+
+For Gradle:
+
+    // Add the repository...
+    repositories {
+      maven {
+        url "https://dl.cloudsmith.io/public/eric-theriault/open-source/maven"
+    
+      }
+    }
+    // Then add the version
+    compile group: 'healthvault:hv-sdk:1.6.1'
+
+## Original Introduction
+
+This project comprises an SDK to access HealthVault/CHBase and some sample ui's
 allowing a user to view and add weight measurements.  
 
 ## Building
 
-    The build environment relies on Maven.  (http://maven.apache.org) 
-    The UI and jaxb libraries both rely on the SDK.  
+The build environment relies on Maven.  (http://maven.apache.org) 
+The UI and jaxb libraries both rely on the SDK.  
 
-    Build from the top level pom.xml:
-    > mvn install
+Build from the top level pom.xml:
 
-    Javadoc:
-    > mvn javadoc:javadoc
+    mvn install
 
-    Create Eclipse environment
-    > mvn eclipse:eclipse
+Javadoc:
 
-    Now import projects into Eclipse: File-->Import.
-    In Project-->Properties-->Build Path, configure the M2_REPO variable to 
-    point at your maven repository.  This is probably in 
-    <user_home>/.m2/repository.  If you miss or skip this step, eclipse will 
-    complain that it cannot find its dependencies.
+    mvn javadoc:javadoc
+
+
+## Eclipse
+
+To create Eclipse environment
+
+    mvn eclipse:eclipse
+
+Then import projects into Eclipse: File-->Import.
+In Project-->Properties-->Build Path, configure the M2_REPO variable to 
+point at your maven repository.  This is probably in 
+<user_home>/.m2/repository.  If you miss or skip this step, eclipse will 
+complain that it cannot find its dependencies.
 
 ## Running the Sample
 
-    You can run the app directly from the command line with maven:
-    > cd sample/jaxb-ui
-    > mvn jetty:run
-    Point your web browser at http://localhost:8080/jwildcat-ui
+You can run the app directly from the command line with maven:
 
-    You can run the web app directly from within Eclipse.  Select the UI 
-    project, then Run As-->Java Application.  Otherwise, take the war produced 
-    from your build above located at ui/target/jwildcat-ui.*.*-SNAPSHOT.war
-    and install it in your servlet container. 
+    cd sample/jaxb-ui
+    mvn jetty:run
+
+Point your web browser at http://localhost:8080/jwildcat-ui
+
+You can run the web app directly from within Eclipse.  Select the UI 
+project, then Run As-->Java Application.  Otherwise, take the war produced 
+from your build above located at ui/target/jwildcat-ui.*.*-SNAPSHOT.war
+and install it in your servlet container. 
 
 ## Private Key
 
-    Healthvault uses public/private key infrastructure to verify the 
-    application.  It does not validate the public key certificate chain so 
-    there is no need to obtain keys from a trusted CA.  The healthvault java 
-    sdk uses the JSSE keystore to obtain the application's private key.  The 
-    keystore file is loaded from the classpath and is shipped with the name 
-    "/keystore".  The following entries in hv-application configure its use:
+Healthvault/CHBase uses public/private key infrastructure to verify the 
+application.  It does not validate the public key certificate chain so 
+there is no need to obtain keys from a trusted CA.  The healthVault/CHBase java 
+sdk uses the JSSE keystore to obtain the application's private key.  The 
+keystore file is loaded from the classpath and is shipped with the name 
+"/keystore".  The following entries in hv-application configure its use:
 
     keystore.filename=/keystore
     keystore.keyname=java-wildcat
     keystore.password=password
 
-    The jdk ships with a tool to create and manage keys within this store: keytool 
-    (http://java.sun.com/javase/6/docs/technotes/tools/windows/keytool.html)
+The jdk ships with a tool to create and manage keys within this store: keytool 
+(http://java.sun.com/javase/6/docs/technotes/tools/windows/keytool.html)
 
-    The instructions for how to generate a public/private key pair are 
-    described in the documentation for the 
-    com.microsoft.hsg.DefaultPrivateKeyStore class:
+The instructions for how to generate a public/private key pair are 
+described in the documentation for the 
+com.microsoft.hsg.DefaultPrivateKeyStore class:
 
     keytool -genkeypair -keyalg RSA -keysize 1024 -keystore keystore -alias java-wildcat -validity 9999
 
-    This creates a file named "keystore" if it doesn't already exist and the 
-    generated keys are placed within.  The password for the keystore and the 
-    key must be the same.  You may choose other values for the keystore name 
-    and the key alias, but they must correspond to configuration values in 
-    hv-application.properties.
+This creates a file named "keystore" if it doesn't already exist and the 
+generated keys are placed within.  The password for the keystore and the 
+key must be the same.  You may choose other values for the keystore name 
+and the key alias, but they must correspond to configuration values in 
+hv-application.properties.
 
-    The public key certificate must then be exported from the key store and 
-    sent to the partner team.  
+The public key certificate must then be exported from the key store and 
+sent to the partner team.  
 
-    To export the key:
+To export the key:
 
     keytool -export -alias java-wildcat -keystore keystore > my-pub.cer
 
-    Send the my-pub.cer file to the HealthVault team and we�ll take care of 
-    the rest.
+Upload the my-pub.cer file to CHBase or send the my-pub.cer file to the HealthVault team and they'll take care of 
+the rest.
 
 ## Making SDK Requests
 
-    The application is responsible for marshaling and unmarshaling the <info> 
-    section in each HV Request.  You can find detailed schemas for each 
-    method here:  http://developer.healthvault.com/methods/methods.aspx.
+The application is responsible for marshaling and unmarshaling the <info> 
+section in each HV Request.  You can find detailed schemas for each 
+method here:  http://developer.healthvault.com/methods/methods.aspx.
 
 ## SSL
-    HealthVault requires requests be sent over SSL. Our site's certificates are
-    signed with GTE CyberTrust Global Root as the trusted root certificate 
-    authority. This public key is shipped with Sun�s java runtime in a file 
-    located at java.home/lib/security/cacerts. The alias for this key is 
-    "gtecybertrustglobalca".  Depending on your JRE or environment, this
-    public key may not be installed in your trusted store.  This is a known
-    issue with WebSphere.
 
-    To export the key from the cacerts file:
+HealthVault requires requests be sent over SSL. Our site's certificates are
+signed with GTE CyberTrust Global Root as the trusted root certificate 
+authority. This public key is shipped with Sun's java runtime in a file 
+located at java.home/lib/security/cacerts. The alias for this key is 
+"gtecybertrustglobalca".  Depending on your JRE or environment, this
+public key may not be installed in your trusted store.  This is a known
+issue with WebSphere.
+
+To export the key from the cacerts file:
 
     keytool -keystore cacerts -exportcert -alias gtecybertrustglobalca > gte.crt
 
-    This public key should then be imported into WebSphere�s trusted store.
-
+This public key should then be imported into WebSphere's trusted store.
