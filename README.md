@@ -5,6 +5,9 @@ to that project over the time it was maintained on that project.
 
 The official Microsoft version is in https://github.com/microsoft/healthvault-java-sdk
 
+This also includes differences from https://github.com/CHBase/chbase-java-sdk for
+support CHBase.
+
 ==================================================================================
 
 This project comprises an SDK to access HealthVault and some sample ui's
