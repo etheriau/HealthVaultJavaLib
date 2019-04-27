@@ -1,7 +1,9 @@
 This project was imported from https://archive.codeplex.com/?p=healthvaultjavalib
 
 It contains the latest 1.6.0 version from there plus the patches I have submitted
-to that project over the time it was maintained on that project.
+to that project over the time it was maintained on that project.  Those patches
+include porting this to use the slf4j framework and other embeddability and
+testability changes.
 
 The official Microsoft version is in https://github.com/microsoft/healthvault-java-sdk
 
@@ -13,7 +15,8 @@ support CHBase.
 This project comprises an SDK to access HealthVault and some sample ui's
 allowing a user to view and add weight measurements.  
 
-Building:
+## Building
+
     The build environment relies on Maven.  (http://maven.apache.org) 
     The UI and jaxb libraries both rely on the SDK.  
 
@@ -32,7 +35,8 @@ Building:
     <user_home>/.m2/repository.  If you miss or skip this step, eclipse will 
     complain that it cannot find its dependencies.
 
-Running the Sample:
+## Running the Sample
+
     You can run the app directly from the command line with maven:
     > cd sample/jaxb-ui
     > mvn jetty:run
@@ -43,7 +47,8 @@ Running the Sample:
     from your build above located at ui/target/jwildcat-ui.*.*-SNAPSHOT.war
     and install it in your servlet container. 
 
-Private Key:
+## Private Key
+
     Healthvault uses public/private key infrastructure to verify the 
     application.  It does not validate the public key certificate chain so 
     there is no need to obtain keys from a trusted CA.  The healthvault java 
@@ -80,12 +85,13 @@ Private Key:
     Send the my-pub.cer file to the HealthVault team and we�ll take care of 
     the rest.
 
-Making SDK Requests:
+## Making SDK Requests
+
     The application is responsible for marshaling and unmarshaling the <info> 
     section in each HV Request.  You can find detailed schemas for each 
     method here:  http://developer.healthvault.com/methods/methods.aspx.
 
-SSL:
+## SSL
     HealthVault requires requests be sent over SSL. Our site's certificates are
     signed with GTE CyberTrust Global Root as the trusted root certificate 
     authority. This public key is shipped with Sun�s java runtime in a file 
