@@ -125,7 +125,7 @@ Upload the my-pub.cer file to CHBase or send the my-pub.cer file to the HealthVa
 
 ### Making SDK Requests
 
-The application is responsible for marshaling and unmarshaling the <info> section in each HV Request.  You can find detailed schemas for each method here:  http://developer.healthvault.com/methods/methods.aspx.
+The application is responsible for marshaling and unmarshaling the <info> section in each HV Request.  You can find detailed schemas for each method here:  http://developer.healthvault.com/methods/methods.aspx or https://developer.chbase.com/ .
 
 ### SSL
 
