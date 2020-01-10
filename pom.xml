@@ -9,8 +9,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>sdk</module>
-    <module>hv-jaxb</module>
-    <module>examples/ui-jaxb</module>
     <module>examples/ui-sdk</module>
   </modules>
 
