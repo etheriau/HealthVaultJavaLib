@@ -10,6 +10,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -22,7 +23,8 @@ public class PutThingsTest {
     
     public static final String WeightType = "3d34d87e-7fc1-4153-800f-f56592cb0d17";
     public static final String PersonalImageType = "a5294488-f865-4ce3-92fa-187cd3b58930";
-    
+
+    @Ignore
     @Test
     public void UpdateWeightTest()
     {
@@ -67,7 +69,8 @@ public class PutThingsTest {
         );
         template.makeRequest(request);
     }
-    
+
+    @Ignore
     @Test
     public void UpdatePersonalImageTest()
     {   
@@ -134,7 +137,8 @@ public class PutThingsTest {
         public String Id;
         public String Version;
     }
-    
+
+    @Ignore
     @Test
     public void PutCCDTest() throws Exception {
     	InputStream in = getClass().getResourceAsStream("/TestCCD.txt");
