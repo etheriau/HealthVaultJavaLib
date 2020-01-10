@@ -1,6 +1,6 @@
 ## Overview
 
-This is a library to integrate with the HealthVault and CHBase systems.
+This is a library to integrate with the CHBase systems using the now defunct HealthVault-style API.
 
 ### History
 
@@ -86,18 +86,6 @@ Once this is done, in Eclipse:
 
 To use this in your IntelliJ configuration, simply open the directory which you checked this out and it should just work out of the box.
 
-### Running the Sample
-
-You can run the app directly from the command line with maven:
-
-    cd sample/jaxb-ui
-    mvn jetty:run
-
-Point your web browser at http://localhost:8080/jwildcat-ui
-
-You can run the web app directly from within Eclipse.  Select the UI project, then Run As-->Java Application.  Otherwise, take the war produced from your build above located at ui/target/jwildcat-ui.*.*-SNAPSHOT.war
-and install it in your servlet container. 
-
 ### Private Key
 
 Healthvault/CHBase uses public/private key infrastructure to verify the application.  It does not validate the public key certificate chain so there is no need to obtain keys from a trusted CA.  The healthVault/CHBase java sdk uses the JSSE keystore to obtain the application's private key.  The keystore file is loaded from the classpath and is shipped with the name "/keystore".  The following entries in hv-application configure its use:
@@ -129,8 +117,8 @@ The application is responsible for marshaling and unmarshaling the <info> sectio
 
 ### SSL
 
-HealthVault and CHBase requires requests be sent over SSL. These certificates are signed by reputable Certificate Authorities whose trusted root certificates is provided with the Java runtime.
+CHBase requires requests be sent over SSL. These certificates are signed by reputable Certificate Authorities whose trusted root certificates is provided with the Java runtime.
 
 ### Contributions
 
-If you do notice any issues in the documentation or the code, please submit a path or at least let us know.
+If you do notice any issues in the documentation or the code, please submit a patch or at least let us know.
