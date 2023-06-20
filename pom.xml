@@ -9,7 +9,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>sdk</module>
-    <module>examples/ui-sdk</module>
   </modules>
 
   <build>
