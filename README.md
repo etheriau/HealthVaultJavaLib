@@ -1,6 +1,7 @@
 ## Overview
 
-This is a library to integrate with the CHBase systems using the now defunct HealthVault-style API.
+This is a library to integrate with the now defunct HealthVault-style API.
+This is no longer maintained and effectively deprecated.
 
 ### History
 
@@ -15,6 +16,9 @@ The official Microsoft version is in https://github.com/microsoft/healthvault-ja
 
 This also includes differences from https://github.com/CHBase/chbase-java-sdk for
 support CHBase.
+
+On December 1, 2023, Lydia was deprecated, thus this library is just historical
+and no longer maintained.
 
 ### Maven Repository
 
